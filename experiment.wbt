@@ -1,0 +1,167 @@
+#VRML_SIM R2020b utf8
+WorldInfo {
+  coordinateSystem "NUE"
+}
+Viewpoint {
+  orientation 0.33369764377116184 -0.9100882588391047 -0.24573409137680038 4.675107384167243
+  position 2.1400289960192347 1.280762392341355 -0.2972790716728171
+}
+TexturedBackground {
+}
+TexturedBackgroundLight {
+}
+RectangleArena {
+  floorSize 10 10
+}
+DEF supervisor Robot {
+  translation 0.1 0 0.1
+  children [
+    DEF emitter1 Emitter {
+      name "emitter1"
+      channel 1
+    }
+    DEF emitter2 Emitter {
+      name "emitter2"
+      channel 2
+    }
+    DEF receiver1 Receiver {
+      name "receiver1"
+      channel 1
+    }
+    DEF receiver2 Receiver {
+      name "receiver2"
+      channel 2
+    }
+  ]
+  name "supervisor"
+  controller "<extern>"
+  supervisor TRUE
+}
+DEF robot1 Robot {
+  translation 1.1560580086257478e-15 0.2072469900892587 -0.4854702799015024
+  rotation 1 3.703843537917367e-15 -1.668336859148374e-15 -0.009546307247940401
+  children [
+    Receiver {
+      channel 1
+    }
+    Emitter {
+      channel 1
+    }
+    DEF gyro Gyro {
+    }
+    DEF accelerometer Accelerometer {
+    }
+    DEF leg1 Shape {
+      appearance PBRAppearance {
+        baseColor 0.45098 0.823529 0.0862745
+        metalness 0
+      }
+      geometry DEF boxA Box {
+        size 0.1 0.2 0.1
+      }
+    }
+    HingeJoint {
+      jointParameters HingeJointParameters {
+        position 2.1053312204699637e-08
+        anchor 0 -0.11 0
+        staticFriction 0.1
+      }
+      device [
+        RotationalMotor {
+          name "motor"
+        }
+      ]
+      endPoint Solid {
+        translation 2.7755575615628914e-17 -0.16000000252639773 0.11999999894733412
+        rotation 1 -1.0143671889993788e-16 1.1460021514816537e-16 1.5708000210533084
+        children [
+          DEF leg2 Shape {
+            appearance PBRAppearance {
+              baseColor 0.45098 0.823529 0.0862745
+              metalness 0
+            }
+            geometry DEF boxB Box {
+              size 0.1 0.2 0.1
+            }
+          }
+        ]
+        boundingObject USE boxB
+        physics Physics {
+        }
+        linearVelocity 1.8578393118694355e-16 -2.3047116510930486e-05 -2.7867140326538756e-05
+        angularVelocity -0.0005572559189213074 -3.1097219533364576e-17 -2.533217314197576e-15
+      }
+    }
+  ]
+  name "robot1"
+  boundingObject USE boxA
+  physics Physics {
+  }
+  controller "<extern>"
+  linearVelocity 3.331343105228579e-16 -9.26809889852412e-05 -0.00011568025630109111
+  angularVelocity -0.0005572522041714913 -1.4677614220734214e-16 -1.51337077345507e-15
+}
+DEF robot2 Robot {
+  translation 0.82 0.04842632776675006 -0.3834822803833158
+  rotation 1 2.349100191610099e-15 2.1951692571151304e-15 -1.5580184614561345
+  children [
+    Receiver {
+      channel 2
+    }
+    Emitter {
+      channel 2
+    }
+    DEF gyro Gyro {
+    }
+    DEF accelerometer Accelerometer {
+    }
+    DEF leg1 Shape {
+      appearance PBRAppearance {
+        baseColor 0.45098 0.823529 0.0862745
+        metalness 0
+      }
+      geometry DEF boxA Box {
+        size 0.1 0.2 0.1
+      }
+    }
+    HingeJoint {
+      jointParameters HingeJointParameters {
+        position 1.0111426470560416e-06
+        anchor 0 -0.11 0
+        staticFriction 0.1
+      }
+      device [
+        RotationalMotor {
+          name "motor"
+        }
+      ]
+      endPoint Solid {
+        translation 2.7755575615628907e-17 -0.16000012133709235 0.11999994944280604
+        rotation 1 1.2579108914443575e-16 -1.312518003287636e-16 1.5708010111426438
+        children [
+          DEF leg2 Shape {
+            appearance PBRAppearance {
+              baseColor 0.45098 0.823529 0.0862745
+              metalness 0
+            }
+            geometry DEF boxB Box {
+              size 0.1 0.2 0.1
+            }
+          }
+        ]
+        boundingObject USE boxB
+        physics Physics {
+        }
+        linearVelocity 8.567501764266934e-17 -1.154543875372836e-06 -8.689485649644909e-08
+        angularVelocity -5.180718267183702e-07 -1.758669118674548e-16 -1.9527210083655056e-15
+      }
+    }
+  ]
+  name "robot2"
+  boundingObject USE boxA
+  physics Physics {
+  }
+  controller "<extern>"
+  linearVelocity 6.437306070332958e-17 -8.05158407501956e-08 -2.580486603723368e-08
+  angularVelocity -5.160697085670941e-07 -2.3018268898751304e-16 1.06996695010183e-15
+}
