@@ -18,11 +18,11 @@ public class SupervisorController {
         Supervisor supervisor = new Supervisor();
         int timeStep =  (int)Math.round(supervisor.getBasicTimeStep());
 
-        ObjectCommunicator<Integer, IMUReading> communicator1 = new ObjectCommunicator<>(
+        ObjectCommunicator<Double, IMUReading> communicator1 = new ObjectCommunicator<>(
             supervisor.getEmitter("emitter1"), supervisor.getReceiver("receiver1"), timeStep
         );
 
-        ObjectCommunicator<Integer, IMUReading> communicator2 = new ObjectCommunicator<>(
+        ObjectCommunicator<Double, IMUReading> communicator2 = new ObjectCommunicator<>(
             supervisor.getEmitter("emitter2"), supervisor.getReceiver("receiver2"), timeStep
         );
 
@@ -42,7 +42,7 @@ public class SupervisorController {
             counter++;
 
             if(counter > 100 && counter % 50 == 0) {
-                int position = counter % 100 == 0 ? 0 : 1;
+                double position = counter % 100 == 0 ? 0 : 1;
                 communicator1.emit(position);
                 communicator2.emit(position);
             }
