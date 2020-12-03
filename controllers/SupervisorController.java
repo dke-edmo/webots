@@ -13,6 +13,8 @@ public class SupervisorController {
 
     public static void main(String[] args) {
 
+        System.out.println("Working Directory = " + System.getProperty("user.dir"));
+
         Supervisor supervisor = new Supervisor();
         int timeStep =  (int)Math.round(supervisor.getBasicTimeStep());
 
@@ -81,8 +83,8 @@ public class SupervisorController {
 
         }
 
-        Serializer.saveToFile(readings1, "./resources/reading1.ser");
-        Serializer.saveToFile(readings2, "./resources/reading2.ser");
+        Serializer.saveToFile(readings1, "../../resources/reading1.ser");
+        Serializer.saveToFile(readings2, "../../resources/reading2.ser");
 
     }
 
