@@ -1,5 +1,3 @@
-package SupervisorController;
-
 import Webots.IMUReadings;
 import Utility.*;
 import Webots.IMUSensor.IMUReading;
