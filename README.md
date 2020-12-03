@@ -8,7 +8,9 @@ Please review:
 
 I'm (Tomek) using Java SDK 1.8, language version 11, JetBrains InteliJ on Ubuntu 20.04 with Webots installed trough Snap.
 
-To get the repository to work I had to:
+Currently, the `experiment.wbt` is
+
+To get Webots to work with external controllers I had to:
 - Add to my `~./profile`
 ```
 export WEBOTS_HOME=/snap/webots/current/usr/share/webots

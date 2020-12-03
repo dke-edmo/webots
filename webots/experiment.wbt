@@ -34,7 +34,7 @@ DEF supervisor Robot {
     }
   ]
   name "supervisor"
-  controller "<extern>"
+  controller "SupervisorController"
   supervisor TRUE
 }
 DEF robot1 Robot {
@@ -72,8 +72,8 @@ DEF robot1 Robot {
         }
       ]
       endPoint Solid {
-        translation 2.7755575615628914e-17 -0.16000000252639773 0.11999999894733412
-        rotation 1 -1.0143671889993788e-16 1.1460021514816537e-16 1.5708000210533084
+        translation 2.7755575615628975e-17 -0.16000000252639773 0.1199999989473344
+        rotation 1 -1.014367188999379e-16 1.146002151481655e-16 1.5708000210533084
         children [
           DEF leg2 Shape {
             appearance PBRAppearance {
@@ -88,8 +88,6 @@ DEF robot1 Robot {
         boundingObject USE boxB
         physics Physics {
         }
-        linearVelocity 1.8578393118694355e-16 -2.3047116510930486e-05 -2.7867140326538756e-05
-        angularVelocity -0.0005572559189213074 -3.1097219533364576e-17 -2.533217314197576e-15
       }
     }
   ]
@@ -97,9 +95,7 @@ DEF robot1 Robot {
   boundingObject USE boxA
   physics Physics {
   }
-  controller "<extern>"
-  linearVelocity 3.331343105228579e-16 -9.26809889852412e-05 -0.00011568025630109111
-  angularVelocity -0.0005572522041714913 -1.4677614220734214e-16 -1.51337077345507e-15
+  controller "JointController"
 }
 DEF robot2 Robot {
   translation 0.82 0.04842632776675006 -0.3834822803833158
@@ -137,7 +133,7 @@ DEF robot2 Robot {
       ]
       endPoint Solid {
         translation 2.7755575615628907e-17 -0.16000012133709235 0.11999994944280604
-        rotation 1 1.2579108914443575e-16 -1.312518003287636e-16 1.5708010111426438
+        rotation 1 1.2579108914443577e-16 -1.3125180032876373e-16 1.5708010111426438
         children [
           DEF leg2 Shape {
             appearance PBRAppearance {
@@ -152,8 +148,6 @@ DEF robot2 Robot {
         boundingObject USE boxB
         physics Physics {
         }
-        linearVelocity 8.567501764266934e-17 -1.154543875372836e-06 -8.689485649644909e-08
-        angularVelocity -5.180718267183702e-07 -1.758669118674548e-16 -1.9527210083655056e-15
       }
     }
   ]
@@ -161,7 +155,5 @@ DEF robot2 Robot {
   boundingObject USE boxA
   physics Physics {
   }
-  controller "<extern>"
-  linearVelocity 6.437306070332958e-17 -8.05158407501956e-08 -2.580486603723368e-08
-  angularVelocity -5.160697085670941e-07 -2.3018268898751304e-16 1.06996695010183e-15
+  controller "JointController"
 }
