@@ -2,6 +2,7 @@ import Webots.IMUReadings;
 import Utility.*;
 import Webots.IMUSensor.IMUReading;
 import Webots.ObjectCommunicator;
+import Webots.WebotsNode;
 import com.cyberbotics.webots.controller.*;
 
 import java.util.Arrays;
@@ -26,22 +27,20 @@ public class SupervisorController {
             supervisor.getEmitter("emitter2"), supervisor.getReceiver("receiver2"), timeStep
         );
 
-        Node robot1 = supervisor.getFromDef("robot1");
-        Node robot2 = supervisor.getFromDef("robot2");
+        WebotsNode robot1 = new WebotsNode(supervisor.getFromDef("robot1"));
+        WebotsNode robot2 = new WebotsNode(supervisor.getFromDef("robot2"));
 
         IMUReadings readings1 = new IMUReadings();
         IMUReadings readings2 = new IMUReadings();
 
-        System.out.println(Arrays.toString(robot1.getField("rotation").getSFRotation()));
+        Vector yAxisVector = new Vector(0, 1, 0);
 
         int counter = 0;
         while (supervisor.step(timeStep) != -1) {
 
-            System.out.println(Arrays.toString(robot1.getField("rotation").getSFRotation()));
-
             counter++;
 
-            if(counter > 100 && counter % 50 == 0) {
+            if(counter <= 100 && counter % 50 == 0) {
                 double position = counter % 100 == 0 ? 0 : 1;
                 communicator1.emit(position);
                 communicator2.emit(position);
@@ -51,32 +50,22 @@ public class SupervisorController {
                 IMUReading reading = communicator1.receive();
                 readings1.add(reading);
                 System.out.println("Robot1: " + reading);
-                System.out.println(Arrays.toString(robot1.getField("rotation").getSFRotation()));
-                System.out.println(reading.getLinear().unitVector());
+
+                System.out.println("Acceleration: " + reading.getLinear().unitVector());
+
+                Vector axisVector = reading.getLinear().crossProduct(yAxisVector).unitVector();
+                Vector angleVector = new Vector(yAxisVector.angleBetween(reading.getLinear()));
+                Vector rotationVector = new Vector(axisVector.getDoubleArray(), angleVector.getDoubleArray());
+                System.out.println("Rotation Vector: " + rotationVector);
+                System.out.println("Expected vector: " + robot1.getRotation());
+
+                if(counter > 100 && counter % 20 == 0) robot2.setRotation(rotationVector);
             }
 
             if(communicator2.hasNext()) {
                 IMUReading reading = communicator2.receive();
                 readings2.add(reading);
                 System.out.println("Robot2: " + reading);
-                System.out.println(Arrays.toString(robot2.getField("rotation").getSFRotation()));
-                System.out.println(reading.getLinear().unitVector());
-            }
-
-            if(readings1.getAll().size() != 0 && readings2.getAll().size() != 0) {
-                Vector vector1 = readings1.toVector();
-                Vector vector2 = readings2.toVector();
-                System.out.println(
-                    "Readings euclidean distance: " + Utils.round(vector1.euclideanDistance(vector2)) +
-                        " cosine similarity: " + Utils.round(vector1.cosineSimilarity(vector2))
-                );
-
-                Vector vector3 = readings1.toVector().logNormalize();
-                Vector vector4 = readings2.toVector().logNormalize();
-                System.out.println(
-                    "Log normalized Readings euclidean distance: " + Utils.round(vector3.euclideanDistance(vector4)) +
-                        " cosine similarity: " + Utils.round(vector3.cosineSimilarity(vector4))
-                );
             }
 
             if(counter == 1000) break;

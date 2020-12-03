@@ -110,14 +110,20 @@ public class Vector implements Serializable {
             throw new RuntimeException("Both vectors must be 3D for cross product!");
         }
         return new Vector(
-            vector[2]*other.vector[2] - vector[3]*other.vector[2],
-            vector[3]*other.vector[1] - vector[1]*other.vector[3],
-            vector[1]*other.vector[2] - vector[2]*other.vector[1]
+            vector[1]*other.vector[2] - vector[2]*other.vector[1],
+            vector[2]*other.vector[0] - vector[0]*other.vector[2],
+            vector[0]*other.vector[1] - vector[1]*other.vector[0]
         );
     }
 
     public double dotProduct(Vector other) {
         return multiply(other).sumAll();
+    }
+
+    public double angleBetween(Vector other) {
+        return Math.acos(
+            cosineSimilarity(other)
+        );
     }
 
     public Vector square() {
