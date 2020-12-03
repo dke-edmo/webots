@@ -116,6 +116,16 @@ public class Vector implements Serializable {
         );
     }
 
+    /**
+     * Get rotation vector that rotates this vector to the other vector.
+     * @link https://en.wikipedia.org/wiki/Rotation_formalisms_in_three_dimensions#Euler_axis_and_angle_(rotation_vector)
+     */
+    public Vector rotationVector(Vector other) {
+        Vector axisVector = this.crossProduct(other).unitVector();
+        Vector angleVector = new Vector(this.angleBetween(other));
+        return new Vector(axisVector.getDoubleArray(), angleVector.getDoubleArray());
+    }
+
     public double dotProduct(Vector other) {
         return multiply(other).sumAll();
     }

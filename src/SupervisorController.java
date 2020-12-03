@@ -51,14 +51,9 @@ public class SupervisorController {
                 readings1.add(reading);
                 System.out.println("Robot1: " + reading);
 
-                System.out.println("Acceleration: " + reading.getLinear().unitVector());
-
-                Vector axisVector = reading.getLinear().crossProduct(yAxisVector).unitVector();
-                Vector angleVector = new Vector(yAxisVector.angleBetween(reading.getLinear()));
-                Vector rotationVector = new Vector(axisVector.getDoubleArray(), angleVector.getDoubleArray());
+                Vector rotationVector = reading.getLinear().rotationVector(yAxisVector);
                 System.out.println("Rotation Vector: " + rotationVector);
                 System.out.println("Expected vector: " + robot1.getRotation());
-
                 if(counter > 100 && counter % 20 == 0) robot2.setRotation(rotationVector);
             }
 
