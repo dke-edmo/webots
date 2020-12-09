@@ -15,6 +15,14 @@ public class WebotsNode {
         return node;
     }
 
+    public void importChildFromString(String definition) {
+        node
+            .getField("children")
+            .importMFNodeFromString(
+                -1, definition
+            );
+    }
+
     /**
      * @see Vector#rotationVector
      * @link https://cyberbotics.com/doc/reference/transform#field-summary
