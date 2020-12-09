@@ -4,7 +4,7 @@ WorldInfo {
 }
 Viewpoint {
   orientation 0.1208843145415572 -0.963209176779566 -0.24003138183464387 3.770287517982022
-  position 1.5819238955660875 1.0077073065083393 -2.0292163105005665
+  position 3.4167168543443736 2.7543816378020223 -4.544467365106767
 }
 TexturedBackground {
 }
@@ -72,8 +72,8 @@ DEF robot1 Robot {
         }
       ]
       endPoint Solid {
-        translation 2.775557561562927e-17 -0.16000000252639784 0.1199999989473357
-        rotation 1 -1.0143671889993794e-16 1.1460021514816564e-16 1.5708000210533077
+        translation 2.775557561562953e-17 -0.16000000252639784 0.11999999894733687
+        rotation 1 -1.0143671889993794e-16 1.1460021514816577e-16 1.5708000210533075
         children [
           DEF leg2 Shape {
             appearance PBRAppearance {
@@ -113,7 +113,7 @@ DEF robot2 Robot {
     }
     DEF leg1 Shape {
       appearance PBRAppearance {
-        baseColor 0.45098 0.823529 0.0862745
+        baseColor 1 0 0
         metalness 0
       }
       geometry DEF boxA Box {
@@ -133,11 +133,11 @@ DEF robot2 Robot {
       ]
       endPoint Solid {
         translation 2.7755575615628907e-17 -0.16000012133709235 0.11999994944280604
-        rotation 1 1.2579108914443577e-16 -1.3125180032876427e-16 1.5708010111426438
+        rotation 1 1.2579108914443577e-16 -1.312518003287648e-16 1.5708010111426438
         children [
           DEF leg2 Shape {
             appearance PBRAppearance {
-              baseColor 0.45098 0.823529 0.0862745
+              baseColor 1 0 0
               metalness 0
             }
             geometry DEF boxB Box {
