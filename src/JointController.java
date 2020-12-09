@@ -17,6 +17,7 @@ public class JointController {
 
         Motor motor = robot.getMotor("motor");
 
+
         ObjectCommunicator<IMUReading, Double> communicator = new ObjectCommunicator<>(
             robot.getEmitter("emitter"), robot.getReceiver("receiver"), timeStep
         );
@@ -30,7 +31,8 @@ public class JointController {
             communicator.emit(imuSensor.getReading());
 
             if (communicator.hasNext()) {
-                position = communicator.receive();
+                position = (double)communicator.receive();
+
             }
 
             motor.setPosition(position);

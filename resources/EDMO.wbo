@@ -1,0 +1,65 @@
+#VRML_OBJ R2020b utf8
+DEF robot__id__ Robot {
+  translation 0.006814741763527256 0.04921520000000002 -0.4789836033071357
+  rotation -0.009084272152151171 0.009084272152151754 0.9999174725940793 -1.5708788576062969
+  children [
+    Receiver {
+      channel __id__
+    }
+    Emitter {
+      channel __id__
+    }
+    DEF gyro Gyro {
+    }
+    DEF accelerometer Accelerometer {
+    }
+    DEF leg1 Shape {
+      appearance PBRAppearance {
+        baseColor 0.45098 0.823529 0.0862745
+        metalness 0
+      }
+      geometry DEF boxA Box {
+        size 0.1 0.2 0.1
+      }
+    }
+    HingeJoint {
+      jointParameters HingeJointParameters {
+        position 2.220446049250313e-16
+        anchor 0 -0.11 0
+        staticFriction 0.1
+      }
+      device [
+        RotationalMotor {
+          name "motor"
+        }
+      ]
+      endPoint Solid {
+        translation -1.3877787807814457e-17 -0.16000000000000045 0.12000000000000166
+        rotation 1 -1.4106273525892916e-16 -1.337029403758546e-16 1.5707999999999949
+        children [
+          DEF leg2 Shape {
+            appearance PBRAppearance {
+              baseColor 0.45098 0.823529 0.0862745
+              metalness 0
+            }
+            geometry DEF boxB Box {
+              size 0.1 0.2 0.1
+            }
+          }
+        ]
+        boundingObject USE boxB
+        physics Physics {
+        }
+        linearVelocity 1.2029077052984216e-16 -8.993590623250321e-17 -5.773399393069741e-17
+        angularVelocity 1.2512536935138986e-15 1.208559889727835e-15 -1.1227228913757794e-16
+      }
+    }
+  ]
+  name "robot__id__"
+  boundingObject USE boxA
+  physics Physics {
+  }
+  controller "JointController"
+  linearVelocity -7.409846149389287e-17 -1.70530256582424e-16 -3.019365594812571e-17
+  angularVelocity -2.403415103196303e-15 -9.291814709464702e-16 -2.394058444528775e-16
+}

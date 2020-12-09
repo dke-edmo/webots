@@ -5,6 +5,11 @@ import Webots.ObjectCommunicator;
 import Webots.WebotsNode;
 import com.cyberbotics.webots.controller.*;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Arrays;
 
 /**
@@ -18,6 +23,33 @@ public class SupervisorController {
 
         Supervisor supervisor = new Supervisor();
         int timeStep =  (int)Math.round(supervisor.getBasicTimeStep());
+
+        // (Merijn) testing...
+
+        //rootChildrenField.importMFNode(-1, "../../resources/EDMO.wbo");
+        /*
+        File bot = new File("../../resources/EDMO.wbo");
+        String botString = bot.toString().replace("_id_", "3");
+        System.out.println(botString);*/
+        Node root = supervisor.getRoot();
+        Field rootChildrenField = root.getField("children");
+        byte[] encoded = null;
+        try
+        {
+            encoded = Files.readAllBytes(Paths.get("../../resources/EDMO.wbo"));
+        }
+        catch (IOException e)
+        {
+            System.out.println("IOException at importing a new edmo module");
+        }
+        String botString =  new String(encoded, StandardCharsets.US_ASCII);
+        botString = botString.replace("__id__", "3");
+        rootChildrenField.importMFNodeFromString(-1,botString);
+        Node node = rootChildrenField.getMFNode(-1);
+        Field field = node.getField("translation");
+        double[] location = {-1d, 0.5d, 0d};
+        field.setSFVec3f(location);
+
 
         ObjectCommunicator<Double, IMUReading> communicator1 = new ObjectCommunicator<>(
             supervisor.getEmitter("emitter1"), supervisor.getReceiver("receiver1"), timeStep
