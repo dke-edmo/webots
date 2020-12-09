@@ -74,7 +74,7 @@ DEF supervisor Robot {
     }
   ]
   name "supervisor"
-  controller "SupervisorController"
+  controller "SupervisorController2"
   supervisor TRUE
 }
 DEF robot1 Robot {

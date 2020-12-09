@@ -22,27 +22,28 @@ public class SupervisorController2 {
 //                .readString(FileSystem.webotsDirectory + "/EDMO.wbo")
 //                .replaceAll("__id__", "1")
 //        );
-        int num_robots= 7;
-        ObjectCommunicator<Double, IMUReading>[] communicators = new ObjectCommunicator[num_robots];
-        WebotsNode[] robots = new WebotsNode[num_robots];
-        IMUReadings[] readings = new IMUReadings[num_robots];
+        int num_robots= 0;
 
         boolean more = true;
 
-        while(more){
-            try{
-                num_robots++;
-                robots[num_robots-1] = new WebotsNode(supervisor.getFromDef("robot"+num_robots));
-            } catch(Exception e){
+        while (more) {
+            num_robots++;
+            if(supervisor.getFromDef("robot" + num_robots) == null){
                 num_robots--;
-                more =!more;
+                System.out.println("THERE robots: "+num_robots);
+                more = !more;
             }
         }
+
+        ObjectCommunicator<Double, IMUReading>[] communicators = new ObjectCommunicator[num_robots];
+        WebotsNode[] robots = new WebotsNode[num_robots];
+        IMUReadings[] readings = new IMUReadings[num_robots];
 
         for(int i = 1; i<=num_robots; i++){
             communicators[i-1] = new ObjectCommunicator<>(
                     supervisor.getEmitter("emitter"+i), supervisor.getReceiver("receiver"+i), timeStep
             );
+            robots[i-1] = new WebotsNode(supervisor.getFromDef("robot"+i));
             readings[i-1] = new IMUReadings();
         }
 
