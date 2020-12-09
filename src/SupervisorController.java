@@ -1,4 +1,6 @@
 import Graph.Engine;
+import Graph.Graph;
+import Graph.ObjectFactory;
 import Locomotion.CPGNeural;
 import Webots.IMUReadings;
 import Utility.*;
@@ -43,7 +45,17 @@ public class SupervisorController {
         long previousTime = Clock.systemDefaultZone().millis();
 
         CPGNeural cpgNeural = new CPGNeural();
-      //  Engine engine = new Engine();
+
+        //Create an Object Factory which will produce the graph for the robot, and possibly later objects
+        //Specify which robot you want to use
+        ObjectFactory factory = new ObjectFactory("robot3");
+        //Retrieve the robot
+        Graph graph = factory.getRobot();
+        //Display the nodes belonging to that object, which is the robot
+        graph.printNodes();
+        graph.think();
+
+
 
         int counter = 0;
         while (supervisor.step(timeStep) != -1) {
@@ -53,6 +65,10 @@ public class SupervisorController {
             System.out.println(now);
 
             long diff = now - previousTime;     //actual time step
+
+            //Computes a set of actions from the graph
+
+            System.out.println("Center of mass is: " + graph.centerOfMass.dispCoords());
 
 
             double[] motorPos = new double[3];

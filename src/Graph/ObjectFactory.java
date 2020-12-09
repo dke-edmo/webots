@@ -12,12 +12,43 @@ public class ObjectFactory {
     public Graph getRobot(){
         if(this.robot_type.equals("robot1")){return robot1();}
         else if(this.robot_type.equals("robot2")){return robot2();}
+        else if(this.robot_type.equals("robot3")){return robot3();}
         else{
             System.out.println("Wrong label of robot input");
             System.out.close();
         }
 
         return robot1();
+    }
+
+    //2-EDMO Snake type
+    public Graph robot3(){
+
+        Node a = new Node("a", 0,0,0);
+        Node b = new Node("b", 1,0,0);
+        Node c = new Node("c", 2,0,0);
+        Node d = new Node("d", 3,0,0);
+        Node e = new Node("e", 4,0,0);
+        Graph graph = new Graph(this.robot_type);
+        a.addMass(36);
+        b.addMass(78);
+        c.addMass(72);
+        d.addMass(78);
+        e.addMass(36);
+
+        graph.addNode(a);
+        graph.addNode(b);
+        graph.addNode(c);
+        graph.addNode(d);
+        graph.addNode(e);
+
+        graph.connectNodes("a", new String[]{"b"});
+        graph.connectNodes("b", new String[]{"q", "c"});
+        graph.connectNodes("c", new String[]{"b", "d"});
+        graph.connectNodes("d", new String[]{"c", "e"});
+        graph.connectNodes("e", new String[]{"d"});
+
+        return graph;
     }
 
     public Graph robot1(){
