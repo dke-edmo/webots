@@ -19,14 +19,6 @@ public class SupervisorController {
         Supervisor supervisor = new Supervisor();
         int timeStep =  (int)Math.round(supervisor.getBasicTimeStep());
 
-        WebotsNode root = new WebotsNode(supervisor.getRoot());
-
-//        root.importChildFromString(
-//            FileSystem
-//                .readString(FileSystem.webotsDirectory + "/EDMO.wbo")
-//                .replaceAll("__id__", "1")
-//        );
-
         ObjectCommunicator<Double, IMUReading> communicator1 = new ObjectCommunicator<>(
             supervisor.getEmitter("emitter1"), supervisor.getReceiver("receiver1"), timeStep
         );
@@ -48,8 +40,8 @@ public class SupervisorController {
 
             counter++;
 
-            if(counter % 100 == 0) {
-                double position = Math.PI / 2;
+            if(counter <= 100 && counter % 50 == 0) {
+                double position = counter % 100 == 0 ? 0 : 1;
                 communicator1.emit(position);
                 communicator2.emit(position);
             }
@@ -58,10 +50,11 @@ public class SupervisorController {
                 IMUReading reading = communicator1.receive();
                 readings1.add(reading);
                 System.out.println("Robot1: " + reading);
-//                Vector rotationVector = reading.getLinear().rotationVector(yAxisVector);
-//                System.out.println("Rotation Vector: " + rotationVector);
-//                System.out.println("Expected vector: " + robot1.getRotation());
-//                if(counter > 100 && counter % 20 == 0) robot2.setRotation(rotationVector);
+
+                Vector rotationVector = reading.getLinear().rotationVector(yAxisVector);
+                System.out.println("Rotation Vector: " + rotationVector);
+                System.out.println("Expected vector: " + robot1.getRotation());
+                if(counter > 100 && counter % 20 == 0) robot2.setRotation(rotationVector);
             }
 
             if(communicator2.hasNext()) {

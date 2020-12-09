@@ -3,8 +3,8 @@ WorldInfo {
   coordinateSystem "NUE"
 }
 Viewpoint {
-  orientation 0.1208843145415572 -0.963209176779566 -0.24003138183464387 3.770287517982022
-  position 1.5819238955660875 1.0077073065083393 -2.0292163105005665
+  orientation 0.10202498954620186 0.9809010205238643 0.16560220241089413 4.752980963857972
+  position -19.66153524250611 4.208464866492421 3.252295484071415
 }
 TexturedBackground {
 }
@@ -37,70 +37,30 @@ DEF supervisor Robot {
   controller "SupervisorController"
   supervisor TRUE
 }
-DEF robot1 Robot {
-  translation 1.1560580086257478e-15 0.2072469900892587 -0.4854702799015024
-  rotation 0.004773081037872284 0.004773081037872284 0.9999772174378834 -1.5708153071795863
-  children [
-    Receiver {
-      channel 1
-    }
-    Emitter {
-      channel 1
-    }
-    DEF gyro Gyro {
-    }
-    DEF accelerometer Accelerometer {
-    }
-    DEF leg1 Shape {
-      appearance PBRAppearance {
-        baseColor 0.45098 0.823529 0.0862745
-        metalness 0
-      }
-      geometry DEF boxA Box {
-        size 0.1 0.2 0.1
-      }
-    }
-    HingeJoint {
-      jointParameters HingeJointParameters {
-        position 2.1053312204699637e-08
-        anchor 0 -0.11 0
-        staticFriction 0.1
-      }
-      device [
-        RotationalMotor {
-          name "motor"
-        }
-      ]
-      endPoint Solid {
-        translation 2.775557561562927e-17 -0.16000000252639784 0.1199999989473357
-        rotation 1 -1.0143671889993794e-16 1.1460021514816564e-16 1.5708000210533077
-        children [
-          DEF leg2 Shape {
-            appearance PBRAppearance {
-              baseColor 0.45098 0.823529 0.0862745
-              metalness 0
-            }
-            geometry DEF boxB Box {
-              size 0.1 0.2 0.1
-            }
-          }
-        ]
-        boundingObject USE boxB
-        physics Physics {
-        }
-      }
-    }
-  ]
-  name "robot1"
-  boundingObject USE boxA
-  physics Physics {
-  }
-  controller "JointController"
-}
 DEF robot2 Robot {
-  translation 0.82 0.238408 -0.38105
-  rotation -0.9999999635219661 -0.0002217919919094639 -0.00015415699437665574 -0.012775307179586193
+  translation 0 0.42 1.558
+  rotation 1 0 0 1.5708
   children [
+    DEF connector1 Connector {
+      translation 0 -0.42 0
+      rotation 0 0 1 3.14159
+      isLocked TRUE
+      autoLock TRUE
+      distanceTolerance 0.1
+      axisTolerance 3.141592653589793
+      rotationTolerance 3.14159
+      snap FALSE
+    }
+    DEF connector2 Connector {
+      translation 0.365 0.42 0
+      rotation 0 0 1 -1.5708
+      name "connector2"
+    }
+    DEF connector3 Connector {
+      translation -0.365 0.42 0
+      rotation 0 0 1 1.5708
+      name "connector3"
+    }
     Receiver {
       channel 2
     }
@@ -117,13 +77,12 @@ DEF robot2 Robot {
         metalness 0
       }
       geometry DEF boxA Box {
-        size 0.1 0.2 0.1
+        size 0.73 0.84 0.3
       }
     }
     HingeJoint {
       jointParameters HingeJointParameters {
-        position 1.0111426470560416e-06
-        anchor 0 -0.11 0
+        anchor 0 0.42 0
         staticFriction 0.1
       }
       device [
@@ -132,21 +91,25 @@ DEF robot2 Robot {
         }
       ]
       endPoint Solid {
-        translation 2.7755575615628907e-17 -0.16000012133709235 0.11999994944280604
-        rotation 1 1.2579108914443577e-16 -1.3125180032876427e-16 1.5708010111426438
+        translation 0 0.7 0
+        rotation 1 0 0 0
         children [
+          DEF connector4 Connector {
+            translation 0 0.434 0
+          }
           DEF leg2 Shape {
             appearance PBRAppearance {
               baseColor 0.45098 0.823529 0.0862745
               metalness 0
             }
             geometry DEF boxB Box {
-              size 0.1 0.2 0.1
+              size 0.73 0.868 0.3
             }
           }
         ]
         boundingObject USE boxB
         physics Physics {
+          mass 0.4
         }
       }
     }
@@ -154,6 +117,91 @@ DEF robot2 Robot {
   name "robot2"
   boundingObject USE boxA
   physics Physics {
+    mass 0.28
+  }
+  controller "JointController"
+}
+DEF robot1 Robot {
+  translation 0 0.42 0
+  rotation 1 0 0 1.5708
+  children [
+    DEF connector1 Connector {
+      translation 0 -0.42 0
+      rotation 0 0 1 3.14159
+    }
+    DEF connector2 Connector {
+      translation 0.365 0.42 0
+      rotation 0 0 1 -1.5708
+      name "connector2"
+    }
+    DEF connector3 Connector {
+      translation -0.365 0.42 0
+      rotation 0 0 1 1.5708
+      name "connector3"
+    }
+    Receiver {
+      channel 1
+    }
+    Emitter {
+      channel 1
+    }
+    DEF gyro Gyro {
+    }
+    DEF accelerometer Accelerometer {
+    }
+    DEF leg1 Shape {
+      appearance PBRAppearance {
+        baseColor 0.45098 0.823529 0.0862745
+        metalness 0
+      }
+      geometry DEF boxA Box {
+        size 0.73 0.84 0.3
+      }
+    }
+    HingeJoint {
+      jointParameters HingeJointParameters {
+        anchor 0 0.42 0
+        staticFriction 0.1
+      }
+      device [
+        RotationalMotor {
+          name "motor"
+        }
+      ]
+      endPoint Solid {
+        translation 0 0.7 0
+        rotation 1 0 0 0
+        children [
+          DEF connector4 Connector {
+            translation 0 0.434 0
+            isLocked TRUE
+            autoLock TRUE
+            distanceTolerance 0.1
+            axisTolerance 3.14
+            rotationTolerance 3.14
+            snap FALSE
+          }
+          DEF leg2 Shape {
+            appearance PBRAppearance {
+              baseColor 0.45098 0.823529 0.0862745
+              metalness 0
+            }
+            geometry DEF boxB Box {
+              size 0.73 0.868 0.3
+            }
+          }
+        ]
+        boundingObject USE boxB
+        physics Physics {
+          mass 0.4
+        }
+      }
+    }
+  ]
+  name "robot1"
+  boundingObject USE boxA
+  physics Physics {
+    mass 0.28
   }
   controller "JointController"
 }
