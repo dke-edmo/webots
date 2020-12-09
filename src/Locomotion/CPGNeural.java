@@ -56,7 +56,7 @@ public class CPGNeural {
 
             double modul_offset = c * (CPGs[i].offset - CPGs[i].targetOffset);
 
-            CPGs[i].pos = CPGs[i].amplitude * Math.sin(CPGs[i].phase) + modul_offset;
+            CPGs[i].pos = (CPGs[i].amplitude * Math.sin(CPGs[i].phase) + modul_offset) / 100;
 
             System.out.println("Motor position for: " + i + " is " + CPGs[i].pos);
 
