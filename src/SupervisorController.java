@@ -1,3 +1,4 @@
+import Locomotion.CPGNeural;
 import Webots.IMUReadings;
 import Utility.*;
 import Webots.IMUSensor.IMUReading;
@@ -5,6 +6,9 @@ import Webots.ObjectCommunicator;
 import Webots.WebotsNode;
 import com.cyberbotics.webots.controller.*;
 
+import java.time.Clock;
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 
 /**
@@ -35,16 +39,42 @@ public class SupervisorController {
 
         Vector yAxisVector = new Vector(0, 1, 0);
 
+        long previousTime = Clock.systemDefaultZone().millis();
+
+        CPGNeural cpgNeural = new CPGNeural();
+
         int counter = 0;
         while (supervisor.step(timeStep) != -1) {
+            System.out.println("Timestep is " + timeStep);
+
+            long now = Clock.systemDefaultZone().millis();
+            System.out.println(now);
+
+            long diff = now - previousTime;     //actual time step
+
+
+            double[] motorPos = new double[3];
+            if(diff >= timeStep) {
+                previousTime = now;
+                System.out.println("Do CPG, step is " + diff);
+                //do CPG Neural
+                CPGNeural.step();
+                motorPos = CPGNeural.getMotorPos();
+
+            }
+
+
 
             counter++;
 
-            if(counter <= 100 && counter % 50 == 0) {
-                double position = counter % 100 == 0 ? 0 : 1;
-                communicator1.emit(position);
-                communicator2.emit(position);
-            }
+          //  if(counter <= 100 && counter % 50 == 0) {
+           //     double position = counter % 100 == 0 ? 0 : 1;
+             //   communicator1.emit(position);
+             //   communicator2.emit(position);
+                //System.out.println("Position is: " + position);
+                communicator1.emit(motorPos[1]);
+                communicator2.emit(motorPos[2]);
+            //}
 
             if(communicator1.hasNext()) {
                 IMUReading reading = communicator1.receive();

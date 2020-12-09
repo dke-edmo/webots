@@ -1,37 +1,81 @@
 package Locomotion;
 
+
+//VERSION FOR TWO MOTOR CONFIGURATION
+
 public class CPGNeural {
 
-    double frequency = 1; // oscillator frequency
+    static double frequency = 1; // oscillator frequency
     double rateOfFrequency = 1;
     double targetFrequency = 1;
     double timeStep = 10;
 
-    double w = 0.025; // we assume that all oscillators use same coupling weight
-    double a = 0.5; // we assume that all oscillators use same adaptation rate for amplitude
-    double c = 0.5; // adaptation rate for frequency and offset
+    static double w = 0.025; // we assume that all oscillators use same coupling weight
+    static double a = 0.5; // we assume that all oscillators use same adaptation rate for amplitude
+    static double c = 0.5; // adaptation rate for frequency and offset
 
-    double NB_MOTORS;
+    double NB_MOTORS = 2;
 
 
-    double phase = 0;                       // phase of the oscillation
-    double amplitude;                   // amplitude of the oscillation
-    double targetAmplitude;             // amplitude to gradually change to
-    double offset;                      // offset for the oscillation (in range of servo 0-180)
-    double targetOffset;                // added parameter to offset smoothly
-    double rateOfPhase;                 // current rate of change of the phase parameter
-    double rateOfAmplitude;             // current rate of change of the amplitude parameter
-    double rateOfOffset;                // current rate of change of the offset parameter
-    double pos;                         // oscillator output = servos angular position in degrees
-    double angle_motor;                 // mapped motor PPM value used to set motor position according to CPG pos
-    double[] phaseBias;                 // controls pairwise coupling phase bias
-    double[] coupling;                  // controls topology of the network
+    static CPG[] CPGs = new CPG[3];
+    static double[] motorPos = new double[CPGs.length];
 
     public CPGNeural(){
 
-        
+        CPG cpg1 = new CPG("motor1", 0,30,30,90,90,0,0,0,0,0, new double[]{0, Math.PI, 0}, new int[]{0,1,0});
+        CPG cpg2 = new CPG("motor2", 0,30,30,90,90,0,0,0,0,0, new double[]{-Math.PI, 0, Math.PI}, new int[]{1,0,1});
+        CPG cpg3 = new CPG("motor3", 0,30,30,90,90,0,0,0,0,0, new double[]{0, -Math.PI, 0}, new int[]{0,1,0});
+
+        CPGs[0] = cpg1;
+        CPGs[1] = cpg2;
+        CPGs[2] = cpg3;
 
     }
 
+
+    // -add timeStep
+    public static void step(){
+        double timeStep = 32;
+        for(int i=0; i< CPGs.length; i++){
+            double sum = 0;
+
+
+            for(int j=0; j< CPGs.length; j++){
+                if(i!=j){
+                    sum += w * CPGs[i].coupling[j] * CPGs[i].amplitude * Math.sin(CPGs[j].phase - CPGs[i].phase - CPGs[i].phaseBias[j]);
+                 }
+            }
+
+            double phaseDerivative = 2 * Math.PI * frequency + sum;
+
+            double ri = a * (CPGs[i].targetAmplitude - CPGs[i].amplitude);
+
+            CPGs[i].amplitude = CPGs[i].amplitude + ri * ((double) timeStep / 1000);
+
+            CPGs[i].phase = CPGs[i].phase + phaseDerivative * ((double) timeStep / 1000);
+
+            double modul_offset = c * (CPGs[i].offset - CPGs[i].targetOffset);
+
+            CPGs[i].pos = CPGs[i].amplitude * Math.sin(CPGs[i].phase) + modul_offset;
+
+            System.out.println("Motor position for: " + i + " is " + CPGs[i].pos);
+
+
+        } //end loop
+
+
+
+        for(int k=0; k<CPGs.length;k++){
+            motorPos[k] = CPGs[k].pos;
+        }
+
+
+    }
+
+    public static double[] getMotorPos(){
+
+        return motorPos;
+
+    }
 
 }

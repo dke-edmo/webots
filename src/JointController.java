@@ -42,12 +42,12 @@ public class JointController {
            /* Random rand = new Random();
             position = rand.nextDouble();*/
 
-            position = count;
+         /*   position = count;
             count += 0.01;
 
             if (count >= 1){
                 count = 0;
-            }
+            }*/
 
             motor.setPosition(position);
 
