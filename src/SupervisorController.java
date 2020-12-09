@@ -1,3 +1,6 @@
+import Graph.Graph;
+import Graph.ObjectFactory;
+import Locomotion.CPGNeural;
 import Webots.IMUReadings;
 import Utility.*;
 import Webots.IMUSensor.IMUReading;
@@ -5,6 +8,7 @@ import Webots.ObjectCommunicator;
 import Webots.WebotsNode;
 import com.cyberbotics.webots.controller.*;
 
+import java.time.Clock;
 import java.util.Arrays;
 
 /**
@@ -67,10 +71,49 @@ public class SupervisorController {
         IMUReadings readings6 = new IMUReadings();
         IMUReadings readings7 = new IMUReadings();
 
+
+        long previousTime = Clock.systemDefaultZone().millis();
+
+        CPGNeural cpgNeural = new CPGNeural();
+
+        //Create an Object Factory which will produce the graph for the robot, and possibly later objects
+        //Specify which robot you want to use
+        ObjectFactory factory = new ObjectFactory("robot3");
+        //Retrieve the robot
+        Graph graph = factory.getRobot();
+        //Display the nodes belonging to that object, which is the robot
+        graph.printNodes();
+        graph.think();
+
+
         Vector yAxisVector = new Vector(0, 1, 0);
 
         int counter = 0;
         while (supervisor.step(timeStep) != -1) {
+
+            System.out.println("Timestep is " + timeStep);
+
+            long now = Clock.systemDefaultZone().millis();
+            System.out.println(now);
+
+            long diff = now - previousTime;     //actual time step
+
+            //Computes a set of actions from the graph
+
+            System.out.println("Center of mass is: " + graph.centerOfMass.dispCoords());
+
+
+            double[] motorPos = new double[3];
+            if(diff >= timeStep) {
+                previousTime = now;
+                System.out.println("Do CPG, step is " + diff);
+                //do CPG Neural
+                CPGNeural.step();
+                motorPos = CPGNeural.getMotorPos();
+
+            }
+
+
 
             counter++;
 

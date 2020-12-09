@@ -11,7 +11,7 @@ public class SupervisorController2 {
     public static void main(String[] args) {
 
         System.out.println("Working Directory = " + System.getProperty("user.dir"));
-
+        System.out.println("bit");
         Supervisor supervisor = new Supervisor();
         int timeStep =  (int)Math.round(supervisor.getBasicTimeStep());
 
@@ -65,6 +65,7 @@ public class SupervisorController2 {
                 if (communicators[i].hasNext()) {
                     IMUReading reading = communicators[i].receive();
                     readings[i].add(reading);
+                    System.out.println("bit");
                     System.out.println("Robot"+i+": " + reading);
 //                Vector rotationVector = reading.getLinear().rotationVector(yAxisVector);
 //                System.out.println("Rotation Vector: " + rotationVector);
