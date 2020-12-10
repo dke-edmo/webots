@@ -44,6 +44,48 @@ public class Graph {
 
     }
 
+    public void rotateX(double angle){
+        ArrayList<Node> newList = new ArrayList<>();
+        for(int i=0; i<nodes.size();i++){
+            double y = nodes.get(i).Y * Math.cos(angle);
+            y += nodes.get(i).Z * Math.sin(angle);
+
+            double z = nodes.get(i).Y * -Math.sin(angle);
+            z += nodes.get(i).Z * Math.cos(angle);
+
+            newList.add(new Node(nodes.get(i).label, nodes.get(i).X, y, z));
+        }
+        this.nodes = newList;
+  }
+
+    public void rotateY(double angle){
+        ArrayList<Node> newList = new ArrayList<>();
+        for(int i=0; i<nodes.size();i++){
+            double x = nodes.get(i).X * Math.cos(angle);
+            x += nodes.get(i).Z * Math.sin(angle);
+
+            double z = nodes.get(i).X * -Math.sin(angle);
+            z += nodes.get(i).Z * Math.cos(angle);
+
+            newList.add(new Node(nodes.get(i).label, x, nodes.get(i).Y, z));
+        }
+        this.nodes = newList;
+    }
+
+    public void rotateZ(double angle){
+        ArrayList<Node> newList = new ArrayList<>();
+        for(int i=0; i<nodes.size();i++){
+            double x = nodes.get(i).X * Math.cos(angle);
+            x += nodes.get(i).Y * Math.sin(angle);
+
+            double y = nodes.get(i).X * -Math.sin(angle);
+            y += nodes.get(i).Y * Math.cos(angle);
+
+            newList.add(new Node(nodes.get(i).label, x, y, nodes.get(i).Z));
+        }
+        this.nodes = newList;
+    }
+
     public void addNode(Node node){
 
         Iterator<Node> iter = this.nodes.iterator();

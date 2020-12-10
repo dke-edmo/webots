@@ -47,6 +47,8 @@ public class Leg {
         this.maxAngle = maxAngle;
     }
 
+
+
     //Updates angle by checking the evolution of the Nodes Coordinates
     public double updateAngle(){
         double distRightLeft = Math.abs(this.left.getDistance(this.right)); //Only this distance changes when the motor angle changes

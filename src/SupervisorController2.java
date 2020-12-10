@@ -1,6 +1,7 @@
 import Graph.Graph;
 import Graph.ObjectFactory;
 import Locomotion.CPGNeural;
+import Locomotion.Leg;
 import Locomotion.Opt;
 import Webots.IMUReadings;
 import Utility.*;
@@ -65,6 +66,7 @@ public class SupervisorController2 {
         CPGNeural cpgNeural5 = new CPGNeural();
         CPGNeural cpgNeural7 = new CPGNeural();
 
+
         //Create an Object Factory which will produce the graph for the robot, and possibly later objects
         //Specify which robot you want to use
         ObjectFactory factory = new ObjectFactory("robot7"); //make own robot
@@ -113,18 +115,22 @@ public class SupervisorController2 {
                     if(leg_h == 0 && i==0){
                         cpgNeural1.step();
                         double[] motorPos = cpgNeural1.getMotorPos();
+                        graph.rotateX(cpgNeural1.changerateAngle());
                         communicators[i].emit(motorPos[0]);
                     } else if(leg_h == 1 && i==2){
                         cpgNeural1.step();
                         double[] motorPos = cpgNeural3.getMotorPos();
+                        graph.rotateX(cpgNeural3.changerateAngle());
                         communicators[i].emit(motorPos[0]);
                     } else if(leg_h == 2 && i==4){
                         cpgNeural1.step();
                         double[] motorPos = cpgNeural5.getMotorPos();
+                        graph.rotateX(cpgNeural5.changerateAngle());
                         communicators[i].emit(motorPos[0]);
                     } else if(leg_h == 3 && i==6){
                         cpgNeural1.step();
                         double[] motorPos = cpgNeural7.getMotorPos();
+                        graph.rotateX(cpgNeural7.changerateAngle());
                         communicators[i].emit(motorPos[0]);
                     } else {
                         communicators[i].emit(position);

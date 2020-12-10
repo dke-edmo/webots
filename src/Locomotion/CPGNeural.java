@@ -16,9 +16,11 @@ public class CPGNeural {
 
     double NB_MOTORS = 2;
 
+    static double oldAngle = 0;
+
 
     static CPG[] CPGs = new CPG[2];
-    static double[] motorPos = new double[CPGs.length];
+    public static double[] motorPos = new double[CPGs.length];
 
     public CPGNeural(){
 
@@ -65,6 +67,9 @@ public class CPGNeural {
 
             CPGs[i].pos = (CPGs[i].amplitude * Math.sin(CPGs[i].phase) + modul_offset);
 
+            //oldAngle = 0;
+            //CPGs[i].angle update
+
             System.out.println("Motor position for: " + i + " is " + CPGs[i].pos);
 
 
@@ -77,6 +82,10 @@ public class CPGNeural {
         }
 
 
+    }
+    public static double changerateAngle(){
+        double change = (CPGs[0].angle_motor - oldAngle);
+        return change;
     }
 
     public static double[] getMotorPos(){

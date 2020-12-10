@@ -1,5 +1,7 @@
 package Graph;
 
+import Locomotion.Leg;
+
 public class ObjectFactory {
 
     String robot_type = "";     //Specify what robot type you want
@@ -89,6 +91,17 @@ public class ObjectFactory {
         graph.connectNodes("m", new String[]{"l", "n"});
         graph.connectNodes("n", new String[]{"m", "o"});
         graph.connectNodes("o", new String[]{"n"});
+
+
+        Leg leg1 = new Leg(a,b,c,-150,150);
+        Leg leg2 = new Leg(g,e,f,-150,150);
+        Leg leg3 = new Leg(i,j,k,-150,150);
+        Leg leg4 = new Leg(o,n,m,-150,150);
+
+        graph.legs.add(leg1);
+        graph.legs.add(leg2);
+        graph.legs.add(leg3);
+        graph.legs.add(leg4);
 
         return graph;
 
@@ -208,6 +221,9 @@ public class ObjectFactory {
         graph.connectNodes("b", new String[]{"a","f","c"});
         graph.connectNodes("c", new String[]{"f","d","b"});
         graph.connectNodes("d", new String[]{"h","c","a"});
+
+
+
 
         return graph;
     }
