@@ -32,6 +32,11 @@ public class CPGNeural {
 
     }
 
+    public void genetic(int index, double phase_incr, double amplitude_incr, double offset_incr){
+        CPGs[0].phase += phase_incr;
+        CPGs[0].amplitude += amplitude_incr;
+    }
+
 
     // -add timeStep
     public static void step(){
@@ -56,7 +61,7 @@ public class CPGNeural {
 
             double modul_offset = c * (CPGs[i].offset - CPGs[i].targetOffset);
 
-            CPGs[i].pos = (CPGs[i].amplitude * Math.sin(CPGs[i].phase) + modul_offset) /10;
+            CPGs[i].pos = (CPGs[i].amplitude * Math.sin(CPGs[i].phase) + modul_offset);
 
             System.out.println("Motor position for: " + i + " is " + CPGs[i].pos);
 

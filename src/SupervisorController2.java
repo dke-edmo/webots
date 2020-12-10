@@ -1,6 +1,7 @@
 import Graph.Graph;
 import Graph.ObjectFactory;
 import Locomotion.CPGNeural;
+import Locomotion.Opt;
 import Webots.IMUReadings;
 import Utility.*;
 import Webots.IMUSensor.IMUReading;
@@ -87,7 +88,12 @@ public class SupervisorController2 {
 
             System.out.println("Center of mass is: " + graph.centerOfMass.dispCoords());
 
-
+            Opt gen = new Opt(new CPGNeural[]{cpgNeural1, cpgNeural3, cpgNeural5, cpgNeural7});
+            CPGNeural[] r = gen.iter();
+            cpgNeural1 = r[0];
+            cpgNeural3 = r[1];
+            cpgNeural5 = r[2];
+            cpgNeural7 = r[3];
 
 
 
