@@ -17,18 +17,18 @@ public class CPGNeural {
     double NB_MOTORS = 2;
 
 
-    static CPG[] CPGs = new CPG[3];
+    static CPG[] CPGs = new CPG[2];
     static double[] motorPos = new double[CPGs.length];
 
     public CPGNeural(){
 
         CPG cpg1 = new CPG("motor1", 0,30,30,90,90,0,0,0,0,0, new double[]{0, Math.PI, 0}, new int[]{0,1,0});
         CPG cpg2 = new CPG("motor2", 0,30,30,90,90,0,0,0,0,0, new double[]{-Math.PI, 0, Math.PI}, new int[]{1,0,1});
-        CPG cpg3 = new CPG("motor3", 0,30,30,90,90,0,0,0,0,0, new double[]{0, -Math.PI, 0}, new int[]{0,1,0});
+      //  CPG cpg3 = new CPG("motor3", 0,30,30,90,90,0,0,0,0,0, new double[]{0, -Math.PI, 0}, new int[]{0,1,0});
 
         CPGs[0] = cpg1;
         CPGs[1] = cpg2;
-        CPGs[2] = cpg3;
+   //     CPGs[2] = cpg3;
 
     }
 
@@ -56,7 +56,7 @@ public class CPGNeural {
 
             double modul_offset = c * (CPGs[i].offset - CPGs[i].targetOffset);
 
-            CPGs[i].pos = (CPGs[i].amplitude * Math.sin(CPGs[i].phase) + modul_offset) / 100;
+            CPGs[i].pos = (CPGs[i].amplitude * Math.sin(CPGs[i].phase) + modul_offset) /10;
 
             System.out.println("Motor position for: " + i + " is " + CPGs[i].pos);
 

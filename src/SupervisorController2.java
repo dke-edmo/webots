@@ -1,3 +1,6 @@
+import Graph.Graph;
+import Graph.ObjectFactory;
+import Locomotion.CPGNeural;
 import Webots.IMUReadings;
 import Utility.*;
 import Webots.IMUSensor.IMUReading;
@@ -5,6 +8,7 @@ import Webots.ObjectCommunicator;
 import Webots.WebotsNode;
 import com.cyberbotics.webots.controller.*;
 
+import java.time.Clock;
 import java.util.Arrays;
 public class SupervisorController2 {
 
@@ -50,23 +54,78 @@ public class SupervisorController2 {
 
         Vector yAxisVector = new Vector(0, 1, 0);
 
+
+        long previousTime = Clock.systemDefaultZone().millis();
+
+        CPGNeural cpgNeural1 = new CPGNeural();
+        CPGNeural cpgNeural3 = new CPGNeural();
+        CPGNeural cpgNeural5 = new CPGNeural();
+        CPGNeural cpgNeural7 = new CPGNeural();
+
+        //Create an Object Factory which will produce the graph for the robot, and possibly later objects
+        //Specify which robot you want to use
+        ObjectFactory factory = new ObjectFactory("robot3"); //make own robot
+        //Retrieve the robot
+        Graph graph = factory.getRobot();
+        //Display the nodes belonging to that object, which is the robot
+        graph.printNodes();
+        graph.think();
+
+
         int counter = 0;
         while (supervisor.step(timeStep) != -1) {
+
+
+         //   System.out.println("Timestep is " + timeStep);
+
+            long now = Clock.systemDefaultZone().millis();
+            System.out.println(now);
+
+            long diff = now - previousTime;     //actual time step
+
+            //Computes a set of actions from the graph
+
+            System.out.println("Center of mass is: " + graph.centerOfMass.dispCoords());
+
+
+
+
 
             counter++;
 
             if(counter % 100 == 0) {
                 double position = Math.PI / 2;
                 for(int i =0; i<num_robots;i++) {
-                    communicators[i].emit(position);
+
+                    if(i==0 || i==2 || i==4 || i==6){
+                        if(i==0){
+                            cpgNeural1.step();
+                            double[] motorPos = cpgNeural1.getMotorPos();
+                            communicators[i].emit(motorPos[0]);
+                        } else if(i==2){
+                            cpgNeural3.step();
+                            double[] motorPos = cpgNeural3.getMotorPos();
+                            communicators[i].emit(motorPos[0]);
+                        }else if(i==4){
+                            cpgNeural5.step();
+                            double[] motorPos = cpgNeural5.getMotorPos();
+                            communicators[i].emit(motorPos[0]);
+                        } else {
+                            cpgNeural7.step();
+                            double[] motorPos = cpgNeural7.getMotorPos();
+                            communicators[i].emit(motorPos[0]);
+                        }
+                    } else {
+                        communicators[i].emit(position);
+                    }
+
                 }
             }
             for(int i =0; i<num_robots;i++) {
                 if (communicators[i].hasNext()) {
                     IMUReading reading = communicators[i].receive();
                     readings[i].add(reading);
-                    System.out.println("bit");
-                    System.out.println("Robot"+i+": " + reading);
+                //    System.out.println("Robot"+i+": " + reading);
 //                Vector rotationVector = reading.getLinear().rotationVector(yAxisVector);
 //                System.out.println("Rotation Vector: " + rotationVector);
 //                System.out.println("Expected vector: " + robot1.getRotation());

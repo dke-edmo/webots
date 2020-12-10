@@ -1,5 +1,7 @@
 package Graph;
 
+import Locomotion.Leg;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -7,12 +9,14 @@ public class Graph {
 
     public String label = "";
     public ArrayList<Node> nodes;
+    public ArrayList<Leg> legs;
     public Node centerOfMass = new Node("centerOfMass", 0,0,0);    //Default center of mass
     double mass = 0;
 
     public Graph(String label){
         this.label = label;
         this.nodes = new ArrayList<>();
+        this.legs = new ArrayList<>();
     }
 
     /**
