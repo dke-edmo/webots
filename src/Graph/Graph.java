@@ -24,7 +24,7 @@ public class Graph {
      */
     public void think(){
         computeCenterOfMass();
-        //Do other stuff
+        //computeWeakPoints();   //crash bug to be fixed
     }
 
     /**

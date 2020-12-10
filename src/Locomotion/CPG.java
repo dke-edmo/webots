@@ -50,4 +50,16 @@ public class CPG {
 
     }
 
+    public String toString(){
+
+        String output = "";
+
+        output.concat(label).concat(",")
+                .concat(String.valueOf(phase)).concat(",")
+                .concat(String.valueOf(amplitude)).concat(",")
+                .concat(String.valueOf(offset));
+
+            return output;
+    }
+
 }

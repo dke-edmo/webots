@@ -55,6 +55,8 @@ public class SupervisorController2 {
 
         Vector yAxisVector = new Vector(0, 1, 0);
 
+        //ObjectFactory graph = new ObjectFactory("robot7");
+
 
         long previousTime = Clock.systemDefaultZone().millis();
 
@@ -65,7 +67,7 @@ public class SupervisorController2 {
 
         //Create an Object Factory which will produce the graph for the robot, and possibly later objects
         //Specify which robot you want to use
-        ObjectFactory factory = new ObjectFactory("robot3"); //make own robot
+        ObjectFactory factory = new ObjectFactory("robot7"); //make own robot
         //Retrieve the robot
         Graph graph = factory.getRobot();
         //Display the nodes belonging to that object, which is the robot
@@ -74,7 +76,10 @@ public class SupervisorController2 {
 
 
         int counter = 0;
+        int leg_counter = 0;
         while (supervisor.step(timeStep) != -1) {
+
+
 
 
          //   System.out.println("Timestep is " + timeStep);
@@ -103,7 +108,30 @@ public class SupervisorController2 {
                 double position = Math.PI / 2;
                 for(int i =0; i<num_robots;i++) {
 
-                    if(i==0 || i==2 || i==4 || i==6){
+                    int leg_h = leg_counter % 4;
+
+                    if(leg_h == 0 && i==0){
+                        cpgNeural1.step();
+                        double[] motorPos = cpgNeural1.getMotorPos();
+                        communicators[i].emit(motorPos[0]);
+                    } else if(leg_h == 1 && i==2){
+                        cpgNeural1.step();
+                        double[] motorPos = cpgNeural3.getMotorPos();
+                        communicators[i].emit(motorPos[0]);
+                    } else if(leg_h == 2 && i==4){
+                        cpgNeural1.step();
+                        double[] motorPos = cpgNeural5.getMotorPos();
+                        communicators[i].emit(motorPos[0]);
+                    } else if(leg_h == 3 && i==6){
+                        cpgNeural1.step();
+                        double[] motorPos = cpgNeural7.getMotorPos();
+                        communicators[i].emit(motorPos[0]);
+                    } else {
+                        communicators[i].emit(position);
+                    }
+                    leg_counter++;
+
+                /*    if(i==0 || i==2 || i==4 || i==6){
                         if(i==0){
                             cpgNeural1.step();
                             double[] motorPos = cpgNeural1.getMotorPos();
@@ -116,14 +144,17 @@ public class SupervisorController2 {
                             cpgNeural5.step();
                             double[] motorPos = cpgNeural5.getMotorPos();
                             communicators[i].emit(motorPos[0]);
-                        } else {
+                        } else if(i==3){
+
+                        }
+                        else {
                             cpgNeural7.step();
                             double[] motorPos = cpgNeural7.getMotorPos();
                             communicators[i].emit(motorPos[0]);
                         }
                     } else {
                         communicators[i].emit(position);
-                    }
+                    }*/
 
                 }
             }
@@ -139,7 +170,15 @@ public class SupervisorController2 {
                 }
 
             }
-            if (counter == 1000) break;
+            if (counter == 10000) {
+                for(int i=0; i<4;i++) {
+                    Serializer.saveToFile(CPGNeural.getCPG().toString(), "../..resources/w" + i + ".ser");
+                }
+                break;
+            }
+
+            graph.think();
+            //kinematics.sendValues(
 
         }
         /*

@@ -37,6 +37,8 @@ public class CPGNeural {
         CPGs[0].amplitude += amplitude_incr;
     }
 
+    public static CPG getCPG(){return CPGs[0];}
+
 
     // -add timeStep
     public static void step(){

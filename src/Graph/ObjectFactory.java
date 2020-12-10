@@ -13,12 +13,85 @@ public class ObjectFactory {
         if(this.robot_type.equals("robot1")){return robot1();}
         else if(this.robot_type.equals("robot2")){return robot2();}
         else if(this.robot_type.equals("robot3")){return robot3();}
+        else if(this.robot_type.equals("robot7")){return robot7();}
         else{
             System.out.println("Wrong label of robot input");
             System.out.close();
         }
 
         return robot1();
+    }
+
+    public Graph robot7(){
+
+        Node a = new Node("a", 0,2,0);
+        Node b = new Node("b", 1,2,0);
+        Node c = new Node("c", 2,2,0);
+        Node d = new Node("d", 3,2,0);
+        Node e = new Node("e", 4,2,0);
+        Node f = new Node("f", 5,2,0);
+        Node g = new Node("g", 6,2,0);
+        Node h = new Node("h", 3,1,0);
+        Node i = new Node("a", 0,0,0);
+        Node j = new Node("b", 1,0,0);
+        Node k = new Node("c", 2,0,0);
+        Node l = new Node("d", 3,0,0);
+        Node m = new Node("e", 4,0,0);
+        Node n = new Node("f", 5,0,0);
+        Node o = new Node("g", 6,0,0);
+
+        Graph graph = new Graph(this.robot_type);
+
+        a.addMass(36);
+        b.addMass(78);
+        c.addMass(72);
+        d.addMass(78);
+        e.addMass(72);
+        f.addMass(78);
+        g.addMass(36);
+        h.addMass(86);
+        i.addMass(36);
+        j.addMass(78);
+        k.addMass(72);
+        l.addMass(78);
+        m.addMass(72);
+        n.addMass(78);
+        o.addMass(36);
+
+        graph.addNode(a);
+        graph.addNode(b);
+        graph.addNode(c);
+        graph.addNode(d);
+        graph.addNode(e);
+        graph.addNode(f);
+        graph.addNode(g);
+        graph.addNode(h);
+        graph.addNode(i);
+        graph.addNode(j);
+        graph.addNode(k);
+        graph.addNode(l);
+        graph.addNode(m);
+        graph.addNode(n);
+        graph.addNode(o);
+
+        graph.connectNodes("a", new String[]{"b"});
+        graph.connectNodes("b", new String[]{"a", "c"});
+        graph.connectNodes("c", new String[]{"b", "d"});
+        graph.connectNodes("d", new String[]{"c", "e", "h"});
+        graph.connectNodes("e", new String[]{"d", "f"});
+        graph.connectNodes("f", new String[]{"g", "e"});
+        graph.connectNodes("g", new String[]{"f"});
+        graph.connectNodes("h", new String[]{"d", "l"});
+        graph.connectNodes("i", new String[]{"j"});
+        graph.connectNodes("j", new String[]{"i", "k"});
+        graph.connectNodes("k", new String[]{"j", "l"});
+        graph.connectNodes("l", new String[]{"k", "h", "m"});
+        graph.connectNodes("m", new String[]{"l", "n"});
+        graph.connectNodes("n", new String[]{"m", "o"});
+        graph.connectNodes("o", new String[]{"n"});
+
+        return graph;
+
     }
 
     //2-EDMO Snake type
