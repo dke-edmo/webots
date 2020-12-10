@@ -31,7 +31,7 @@ public class SupervisorController2 {
             if(supervisor.getFromDef("robot" + num_robots) == null){
                 num_robots--;
                 System.out.println("THERE robots: "+num_robots);
-                more = !more;
+                more = false;
             }
         }
 
