@@ -86,6 +86,7 @@ DEF robot1 Robot {
         ]
         boundingObject USE boxB
         physics Physics {
+          density -1
           mass 0.4
         }
       }
@@ -94,6 +95,7 @@ DEF robot1 Robot {
   name "robot1"
   boundingObject USE boxA
   physics Physics {
+    density -1
     mass 0.28
   }
   controller "JointController"
