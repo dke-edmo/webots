@@ -3,8 +3,8 @@ WorldInfo {
   coordinateSystem "NUE"
 }
 Viewpoint {
-  orientation 0.1208843145415572 -0.963209176779566 -0.24003138183464387 3.770287517982022
-  position 3.4167168543443736 2.7543816378020223 -4.544467365106767
+  orientation 0.11177170842184327 -0.8205519503995712 -0.5605368693421712 3.3429823710992377
+  position 0.16296411332088392 3.1001739020306043 -1.5938415334499396
 }
 TexturedBackground {
 }
@@ -41,6 +41,27 @@ DEF robot1 Robot {
   translation 1.1560580086257478e-15 0.2072469900892587 -0.4854702799015024
   rotation 0.004773081037872284 0.004773081037872284 0.9999772174378834 -1.5708153071795863
   children [
+    Solid {
+      children [
+        DEF leg1 Shape {
+          appearance PBRAppearance {
+            baseColor 0 0 1
+            metalness 0
+          }
+          geometry DEF boxA Box {
+            size 0.1 0.2 0.1
+          }
+        }
+      ]
+      name "solid(1)"
+      boundingObject Box {
+        size 0.1 0.2 0.1
+      }
+      physics Physics {
+        density -1
+        mass 0.0695
+      }
+    }
     Receiver {
       channel 1
     }
@@ -50,14 +71,12 @@ DEF robot1 Robot {
     DEF gyro Gyro {
     }
     DEF accelerometer Accelerometer {
-    }
-    DEF leg1 Shape {
-      appearance PBRAppearance {
-        baseColor 0.45098 0.823529 0.0862745
-        metalness 0
+      boundingObject Box {
+        size 0.1 0.1 0.1
       }
-      geometry DEF boxA Box {
-        size 0.1 0.2 0.1
+      physics Physics {
+        density -1
+        mass 0.021
       }
     }
     HingeJoint {
@@ -69,11 +88,13 @@ DEF robot1 Robot {
       device [
         RotationalMotor {
           name "motor"
+          maxVelocity 3.7
+          maxTorque 1.1
         }
       ]
       endPoint Solid {
-        translation 2.775557561562953e-17 -0.16000000252639784 0.11999999894733687
-        rotation 1 -1.0143671889993794e-16 1.1460021514816577e-16 1.5708000210533075
+        translation 8.196568423990418e-17 -0.16000000252639784 0.11999999894733754
+        rotation 1 1.0089052046011127e-16 2.5452623702702834e-16 1.5708000210533075
         children [
           DEF leg2 Shape {
             appearance PBRAppearance {
@@ -87,12 +108,16 @@ DEF robot1 Robot {
         ]
         boundingObject USE boxB
         physics Physics {
+          density -1
+          mass 0.0695
         }
       }
     }
   ]
   name "robot1"
-  boundingObject USE boxA
+  boundingObject DEF boxA Box {
+    size 0.1 0.2 0.1
+  }
   physics Physics {
   }
   controller "JointController"
@@ -101,6 +126,27 @@ DEF robot2 Robot {
   translation 0.82 0.238408 -0.38105
   rotation -0.9999999635219661 -0.0002217919919094639 -0.00015415699437665574 -0.012775307179586193
   children [
+    Solid {
+      children [
+        DEF leg1 Shape {
+          appearance PBRAppearance {
+            baseColor 1 0 0
+            metalness 0
+          }
+          geometry DEF boxA Box {
+            size 0.1 0.2 0.1
+          }
+        }
+      ]
+      name "solid(1)"
+      boundingObject Box {
+        size 0.1 0.2 0.1
+      }
+      physics Physics {
+        density -1
+        mass 0.0695
+      }
+    }
     Receiver {
       channel 2
     }
@@ -110,14 +156,12 @@ DEF robot2 Robot {
     DEF gyro Gyro {
     }
     DEF accelerometer Accelerometer {
-    }
-    DEF leg1 Shape {
-      appearance PBRAppearance {
-        baseColor 1 0 0
-        metalness 0
+      boundingObject Box {
+        size 0.1 0.1 0.1
       }
-      geometry DEF boxA Box {
-        size 0.1 0.2 0.1
+      physics Physics {
+        density -1
+        mass 0.021
       }
     }
     HingeJoint {
@@ -129,11 +173,13 @@ DEF robot2 Robot {
       device [
         RotationalMotor {
           name "motor"
+          maxVelocity 3.7
+          maxTorque 1.1
         }
       ]
       endPoint Solid {
-        translation 2.7755575615628907e-17 -0.16000012133709235 0.11999994944280604
-        rotation 1 1.2579108914443577e-16 -1.312518003287648e-16 1.5708010111426438
+        translation 1.3322676295501878e-15 -0.16000012133709235 0.11999994944280606
+        rotation 1 1.2576081705240476e-16 -1.3124481752834704e-16 1.5708010111426438
         children [
           DEF leg2 Shape {
             appearance PBRAppearance {
@@ -147,6 +193,8 @@ DEF robot2 Robot {
         ]
         boundingObject USE boxB
         physics Physics {
+          density -1
+          mass 0.0695
         }
       }
     }
