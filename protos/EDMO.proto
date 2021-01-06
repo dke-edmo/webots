@@ -1,0 +1,128 @@
+PROTO EDMO [
+    field SFVec3f translation 0 0 0
+    field SFRotation rotation 0 1 0 0
+    field SFString name "EDMO"
+    ]
+    {
+Robot {
+  translation IS translation
+  rotation IS rotation
+  name IS name
+  children [
+    DEF connector1 Connector {
+      translation 0 -0.42 0
+      rotation 0 -1 1 3.14159
+      name "connector1"
+      isLocked TRUE
+      autoLock TRUE
+      axisTolerance 0.2
+      rotationTolerance 0.2
+      snap TRUE
+    }
+    DEF connector2 Connector {
+      translation 0.365 0.42 0
+      rotation 0 1 0 1.5708
+      name "connector2"
+      isLocked TRUE
+      autoLock TRUE
+      axisTolerance 0.2
+      rotationTolerance 0.2
+      snap TRUE
+    }
+    DEF connector3 Connector {
+      translation -0.365 0.42 0
+      rotation 0 -1 0 1.5708
+      name "connector3"
+      isLocked TRUE
+      autoLock TRUE
+      axisTolerance 0.2
+      rotationTolerance 0.2
+      snap TRUE
+    }
+    Receiver {
+      channel 1
+    }
+    Emitter {
+      channel 1
+    }
+    DEF gyro Gyro {
+    }
+    DEF accelerometer Accelerometer {
+    boundingObject Box {
+      size 0.1 0.1 0.1
+    }
+    physics Physics {
+      density -1
+      mass 0.021
+    }
+    }
+    Solid {
+      children [
+        DEF leg1 Shape {
+          appearance PBRAppearance {
+            baseColor 0 0 1
+            metalness 0
+          }
+          geometry DEF boxA Box {
+            size 0.1 0.2 0.1
+          }
+        }
+      ]
+      name "solid(1)"
+      boundingObject Box {
+        size 0.1 0.2 0.1
+      }
+      physics Physics {
+        density -1
+        mass 0.0695
+      }
+    }
+    HingeJoint {
+      jointParameters HingeJointParameters {
+        anchor 0 0.42 0
+        staticFriction 0.1
+      }
+      device [
+        RotationalMotor {
+          name "motor"
+          maxVelocity 3.7
+          maxTorque 1.1
+        }
+      ]
+      endPoint Solid {
+        translation 0 0.7 0
+        rotation 1 0 0 0
+        children [
+          DEF connector4 Connector {
+            translation 0 0.434 0
+            rotation 1 0 0 -1.5708
+            name "connector4"
+            isLocked TRUE
+            autoLock TRUE
+            snap TRUE
+          }
+          DEF leg2 Shape {
+            appearance PBRAppearance {
+              baseColor 0.45098 0.823529 0.0862745
+              metalness 0
+            }
+            geometry DEF boxB Box {
+              size 0.73 0.868 0.3
+            }
+          }
+        ]
+        boundingObject USE boxB
+        physics Physics {
+          density -1
+          mass 0.0695
+        }
+      }
+    }
+  ]
+  name "robot1"
+  boundingObject USE boxA
+  physics Physics {
+  }
+  controller "JointController"
+}
+}
