@@ -43,13 +43,9 @@ public class SupervisorController {
         WebotsNode robot1 = new WebotsNode(supervisor.getFromDef("robot1"));
         WebotsNode robot2 = new WebotsNode(supervisor.getFromDef("robot2"));
 
-        double[] rotate = {1, 1, 1, 0};
-        robot1.setRotation(new Vector(rotate));
-        robot2.setRotation(new Vector(rotate));
-
         Node cRobot1 = getConnectors(robot1).get(2);
         Node cRobot2 = getConnectors(robot2).get(3);
-        //rotate(robot1, cRobot1, robot2, cRobot2);
+        //translate(robot1, cRobot1, robot2, cRobot2);
 
         IMUReadings readings1 = new IMUReadings();
         IMUReadings readings2 = new IMUReadings();
@@ -118,8 +114,6 @@ public class SupervisorController {
             int greaterX = 0;
             for(Node connector: connectors1){
                 if(connector.getPosition()[0] > connectorR1.getPosition()[0]){
-                    System.out.println("Connector " + connectorR1.getField("name") + " with x =" + connectorR1.getPosition()[0]
-                            + " vs connector " + connector.getField("name") + " with x =" + connector.getPosition()[0]);
                     greaterX++;
                 }
             }
@@ -135,8 +129,6 @@ public class SupervisorController {
             int smallerX = 0;
             for(Node connector: connectors2){
                 if(connector.getPosition()[0] < connectorR2.getPosition()[0]){
-                    System.out.println("Connector " + connectorR2.getField("name") + " with x =" + connectorR2.getPosition()[0]
-                            + " vs connector " + connector.getField("name")+ " with x =" + connector.getPosition()[0]);
                     smallerX++;
                 }
             }
@@ -147,10 +139,16 @@ public class SupervisorController {
         }
     }
 
-    public static void tranlsate(WebotsNode robot1, Node connectorR1, WebotsNode robot2, Node connectorR2){
+    public static void translate(WebotsNode robot1, Node connectorR1, WebotsNode robot2, Node connectorR2){
+        double[] robot1Center = robot1.getNode().getPosition();
+        // Position of the center of the second robot compared to robot 1
+        double goalXRobot2 = robot1Center[0] + connectorR1.getPosition()[0] - connectorR2.getPosition()[0];
+        double goalYRobot2 = robot1Center[1] + connectorR2.getPosition()[1] - connectorR2.getPosition()[1];
+        double goalZRobot2 = robot1Center[2] + connectorR2.getPosition()[2] - connectorR2.getPosition()[2];
 
+        double[] finalRobot2Center = {goalXRobot2, goalYRobot2, goalZRobot2};
+        robot2.getNode().getField("translation").setSFVec3f(finalRobot2Center);
     }
-
 
 
 }
