@@ -45,28 +45,21 @@ public class AlignmentController {
             supervisor.getEmitter("emitter2"), supervisor.getReceiver("receiver2"), timeStep
         );
 
-        WebotsNode robot1 = new WebotsNode(supervisor.getFromDef("robot1"));
-        WebotsNode robot2 = new WebotsNode(supervisor.getFromDef("robot2"));
+        WebotsNode edmo1 = new WebotsNode(supervisor.getFromDef("edmo1"));
+        WebotsNode edmo2 = new WebotsNode(supervisor.getFromDef("edmo2"));
 
-        Node cRobot1 = getConnectors(supervisor, robot1).get(3);
-        Node cRobot2 = getConnectors(supervisor, robot2).get(3);
+        Node connectorEdmo1 = SupervisorController.getConnectors(edmo1).get(3);
+        Node connectorEdmo2 = SupervisorController.getConnectors(edmo2).get(3);
 
-        System.out.println(cRobot1);
-        System.out.println(cRobot2);
+        edmo1.setRotation(new Vector(0, 0, 1, Math.PI));
+        edmo2.setRotation(new Vector(0, 0, 1, 0));
 
-        robot1.setRotation(new Vector(0, 0, 1, Math.PI));
-        robot2.setRotation(new Vector(0, 0, 1, 0));
-
-        Vector connectorRelativeToRobot1 = robot1.getPosition().subtract(new Vector(cRobot1.getPosition()));
-        robot1.setPosition(new Vector(cRobot2.getPosition()).subtract(connectorRelativeToRobot1));
+        Vector connectorRelativeToRobot1 = edmo1.getPosition().subtract(new Vector(connectorEdmo1.getPosition()));
+        edmo1.setPosition(new Vector(connectorEdmo2.getPosition()).subtract(connectorRelativeToRobot1));
 
         while (supervisor.step(timeStep) != -1) {
         }
 
-    }
-
-    public static List<Node> getConnectors(Supervisor supervisor, WebotsNode robot) {
-        return SupervisorController.getConnectors(robot);
     }
 
 }

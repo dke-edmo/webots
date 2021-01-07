@@ -1,7 +1,7 @@
 #VRML_OBJ R2021a utf8
-DEF robot__id__ Robot {
+DEF edmo__id__ Robot {
   translation 0 0.42 0
-  name "robot__id__"
+  name "edmo__id__"
   controller "JointController"
   children [
     DEF connector1 Connector {
