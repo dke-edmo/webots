@@ -112,7 +112,6 @@ public class SupervisorController {
         ArrayList<Node> connectors2 = getConnectors(robot2);
         double[] rotationAroundZCounterClockwise = {0, 0, 1, Math.PI/2};
         Vector rotateCounter = new Vector(rotationAroundZCounterClockwise);
-
         // For robot 1 => Connector facing the right side
         boolean max = false;
         while(!max){
