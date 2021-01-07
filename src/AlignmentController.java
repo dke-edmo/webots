@@ -41,9 +41,8 @@ public class AlignmentController {
         WebotsNode robot1 = new WebotsNode(supervisor.getFromDef("robot1"));
         WebotsNode robot2 = new WebotsNode(supervisor.getFromDef("robot2"));
 
-        Node cRobot1 = supervisor.getFromDef("robot1.connector1");
-        Node cRobot2 = supervisor.getFromDef("robot2.connector1");
-
+        Node cRobot1 = getConnectors(supervisor, robot1).get(3);
+        Node cRobot2 = getConnectors(supervisor, robot2).get(3);
 
         System.out.println(cRobot1);
         System.out.println(cRobot2);
@@ -62,13 +61,7 @@ public class AlignmentController {
     }
 
     public static List<Node> getConnectors(Supervisor supervisor, WebotsNode robot) {
-        String def = robot.getNode().getDef();
-        return Arrays.asList(
-            supervisor.getFromDef(def + ".connector1"),
-            supervisor.getFromDef(def + ".connector2"),
-            supervisor.getFromDef(def + ".connector3"),
-            supervisor.getFromDef(def + ".connector4")
-        );
+        return SupervisorController.getConnectors(robot);
     }
 
 }
