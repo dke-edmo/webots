@@ -77,4 +77,12 @@ public class WebotsNode extends Module {
         node.getField("rotation").setSFRotation(rotationVector.getDoubleArray());
     }
 
+    public Vector getPosition() {
+        return new Vector(node.getPosition());
+    }
+
+    public void setPosition(Vector positionVector) {
+        node.getField("translation").setSFVec3f(positionVector.getDoubleArray());
+    }
+
 }
