@@ -89,6 +89,13 @@ public class Vector implements Serializable {
         return map(v -> v / scalar);
     }
 
+    public Vector add(Vector other) {
+        double[] newVector = new double[getSize()];
+        for (int i = 0; i < getSize(); i++) {
+            newVector[i] = vector[i] + other.vector[i];
+        }
+        return new Vector(newVector);
+    }
     public Vector subtract(Vector other) {
         double[] newVector = new double[getSize()];
         for (int i = 0; i < getSize(); i++) {

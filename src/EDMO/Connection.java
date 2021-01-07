@@ -14,7 +14,7 @@ import EDMO.Exceptions.InvalidStructure;
 public class Connection {
 
     public enum Connector {
-        T, B, L, R, // Top, Bottom, Left, Right
+        B, R, L, T, // Bottom, Right, Left, Top
     }
 
     public enum Orientation {

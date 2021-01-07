@@ -1,9 +1,13 @@
 package Webots;
 
+import EDMO.Module;
 import Utility.Vector;
 import com.cyberbotics.webots.controller.Node;
+import com.cyberbotics.webots.controller.Field;
 
-public class WebotsNode {
+import java.util.ArrayList;
+
+public class WebotsNode extends Module {
 
     private final Node node;
 
@@ -21,6 +25,36 @@ public class WebotsNode {
             .importMFNodeFromString(
                 -1, definition
             );
+    }
+
+    public Node getChildFromTypeName(String typeName, String subTree){
+        int count = 0;
+        Field children = node.getField(subTree);
+        Node childNode;
+        if ((childNode = children.getSFNode()) != null && childNode.getTypeName().equals(typeName)){
+            return childNode;
+        }
+        while((childNode = children.getMFNode(count)) != null){
+            if(childNode.getTypeName().equals(typeName)){
+                return childNode;
+            }
+            count++;
+        }
+        return null;
+    }
+
+    public ArrayList<Node> getChildrenFromTypeName(String typeName, String subTree){
+        int count = 0;
+        ArrayList<Node> childrenNodes = new ArrayList<>();
+        Field children = node.getField(subTree);
+        Node childNode;
+        while((childNode = children.getMFNode(count)) != null){
+            if(childNode.getTypeName().equals(typeName)){
+                childrenNodes.add(childNode);
+            }
+            count++;
+        }
+        return childrenNodes;
     }
 
     /**
