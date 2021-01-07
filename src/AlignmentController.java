@@ -1,3 +1,4 @@
+import Utility.FileSystem;
 import Utility.Vector;
 import Webots.IMUSensor;
 import Webots.ObjectCommunicator;
@@ -24,11 +25,17 @@ public class AlignmentController {
 
         WebotsNode root = new WebotsNode(supervisor.getRoot());
 
-//        root.importChildFromString(
-//            FileSystem
-//                .readString(FileSystem.webotsDirectory + "/EDMO.wbo")
-//                .replaceAll("__id__", "1")
-//        );
+        root.importChildFromString(
+            FileSystem
+                .readString(FileSystem.webotsDirectory + "/EDMO.wbo")
+                .replaceAll("__id__", "1")
+        );
+
+        root.importChildFromString(
+            FileSystem
+                .readString(FileSystem.webotsDirectory + "/EDMO.wbo")
+                .replaceAll("__id__", "2")
+        );
 
         ObjectCommunicator<Double, IMUSensor.IMUReading> communicator1 = new ObjectCommunicator<>(
             supervisor.getEmitter("emitter1"), supervisor.getReceiver("receiver1"), timeStep
@@ -51,8 +58,6 @@ public class AlignmentController {
         robot2.setRotation(new Vector(0, 0, 1, 0));
 
         Vector connectorRelativeToRobot1 = robot1.getPosition().subtract(new Vector(cRobot1.getPosition()));
-        System.out.println("C1 displacement from R1" + connectorRelativeToRobot1);
-
         robot1.setPosition(new Vector(cRobot2.getPosition()).subtract(connectorRelativeToRobot1));
 
         while (supervisor.step(timeStep) != -1) {
