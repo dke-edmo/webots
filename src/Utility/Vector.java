@@ -189,9 +189,7 @@ public class Vector implements Serializable {
                 axisVector = this.crossProduct(other);
             } else {
                 double a = vector[0], b = vector[1], c = vector[2];
-                System.out.println("- (a + b) / c" + - (a + b) / c);
                 axisVector = new Vector(1, 1, - (a + b) / c);
-                System.out.println(this.dotProduct(axisVector));
             }
             Vector angleVector = new Vector(this.angleBetween(other));
             return new RotationVector(
