@@ -80,13 +80,18 @@ public class AlignmentController {
         WebotsNode connectorEdmo1 = new WebotsNode(SupervisorController.getConnectors(edmo1).get(connector1));
         WebotsNode connectorEdmo2 = new WebotsNode(SupervisorController.getConnectors(edmo2).get(connector2));
 
+        edmo1.setRotation(new RotationVector(0, 1, 0, 0));
+
+        supervisor.step(timeStep);
+        supervisor.simulationResetPhysics();
+
         Vector zAxisCE1 = connectorEdmo1.getZAxisOrientation();
         Vector zAxisCE2 = connectorEdmo2.getZAxisOrientation().multiply(-1);
         RotationVector vecRotFromCE1ToCE2 = zAxisCE1.rotationVector(zAxisCE2);
         System.out.println(zAxisCE1);
         System.out.println(zAxisCE2);
         System.out.println(vecRotFromCE1ToCE2);
-        edmo1.setRotation(edmo1.getRotation().addRotation(vecRotFromCE1ToCE2));
+        edmo1.setRotation(vecRotFromCE1ToCE2);
 
         supervisor.step(timeStep);
         supervisor.simulationResetPhysics();
