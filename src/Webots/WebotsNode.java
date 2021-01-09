@@ -1,6 +1,7 @@
 package Webots;
 
 import EDMO.Module;
+import Utility.RotationVector;
 import Utility.Vector;
 import com.cyberbotics.webots.controller.Node;
 import com.cyberbotics.webots.controller.Field;
@@ -51,13 +52,40 @@ public class WebotsNode extends Module {
     }
 
     /**
+     * This function returns a matrix containing exactly 9 values
+     * that shall be interpreted as a 3 x 3 orthogonal rotation matrix:
+     * [ R[0] R[1] R[2] ]
+     * [ R[3] R[4] R[5] ]
+     * [ R[6] R[7] R[8] ]
+     * Each column of the matrix represents where each of
+     * the three main axes (x, y and z) is pointing in the node's coordinate system.
+     *
+     * @link https://cyberbotics.com/doc/reference/supervisor#wb_supervisor_node_get_orientation
+     */
+    public Vector getOrientation() {
+        return new Vector(node.getOrientation());
+    }
+
+    public Vector getXAxisOrientation() {
+        return getOrientation().getEveryNthValue(3, 0);
+    }
+
+    public Vector getYAxisOrientation() {
+        return getOrientation().getEveryNthValue(3, 1);
+    }
+
+    public Vector getZAxisOrientation() {
+        return getOrientation().getEveryNthValue(3, 2);
+    }
+
+    /**
      * @see Vector#rotationVector
      * @link https://cyberbotics.com/doc/reference/transform#field-summary
      * @link https://cyberbotics.com/doc/reference/supervisor?tab-language=java#wb_supervisor_node_get_field
      * @link https://cyberbotics.com/doc/reference/supervisor?tab-language=java#wb_supervisor_field_get_sf_rotation
      */
-    public Vector getRotation() {
-        return new Vector(node.getField("rotation").getSFRotation());
+    public RotationVector getRotation() {
+        return new RotationVector(node.getField("rotation").getSFRotation());
     }
 
     /**
@@ -68,14 +96,22 @@ public class WebotsNode extends Module {
      */
     public void setRotation(Vector rotationVector) {
         node.getField("rotation").setSFRotation(rotationVector.getDoubleArray());
+//        Webots.Supervisor.update();
+//        node.resetPhysics();
     }
 
     public Vector getPosition() {
         return new Vector(node.getPosition());
     }
 
-    public void setPosition(Vector positionVector) {
+    public Vector getTranslation() {
+        return new Vector(node.getField("translation").getSFVec3f());
+    }
+
+    public void setTranslation(Vector positionVector) {
         node.getField("translation").setSFVec3f(positionVector.getDoubleArray());
+//        Webots.Supervisor.update();
+//        node.resetPhysics();
     }
 
 }
