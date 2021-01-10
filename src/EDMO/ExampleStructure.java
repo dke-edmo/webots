@@ -15,5 +15,24 @@ public class ExampleStructure {
             new Connection(moduleA, moduleR, Connection.Connector.R, Connection.Connector.B, Connection.Orientation.H)
         );
 
+        try {
+            new Structure(
+                new Connection(moduleA, moduleL, Connection.Connector.L, Connection.Connector.B, Connection.Orientation.H),
+                new Connection(moduleA, moduleR, Connection.Connector.R, Connection.Connector.B, Connection.Orientation.H),
+                new Connection(moduleL, moduleR, Connection.Connector.T, Connection.Connector.T, Connection.Orientation.H)
+            );
+        } catch (Exception e) {
+            System.out.println("Expected exception: " + e.getMessage());
+        }
+
+        try {
+            new Structure(
+                new Connection(moduleA, moduleL, Connection.Connector.T, Connection.Connector.B, Connection.Orientation.H),
+                new Connection(moduleA, moduleR, Connection.Connector.T, Connection.Connector.B, Connection.Orientation.H)
+            );
+        } catch (Exception e) {
+            System.out.println("Expected exception: " + e.getMessage());
+        }
+
     }
 }

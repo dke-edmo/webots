@@ -69,6 +69,12 @@ public class Connection {
         return connectorB;
     }
 
+    public Connector getConnectorByModule(Module module) {
+        if(module == moduleA) return connectorA;
+        if(module == moduleB) return connectorB;
+        throw new RuntimeException("Module: " + module + " does not belong to this connection!");
+    }
+
     public Orientation getOrientation() {
         return orientation;
     }
