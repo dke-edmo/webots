@@ -79,7 +79,8 @@ public class Structure {
     private void validate() {
         Module current = modules.iterator().next();
         validateNoCycles(current, null, new HashSet<>());
-        validateFullyConnected(current, new HashSet<>());
+        getTopologicallySortedModules(current, new ArrayList<>());
+        getTopologicallySortedConnections(connections.iterator().next(), new ArrayList<>());
     }
 
     private void validateNoCycles(Module current, Module previous, Set<Module> visited) {
@@ -93,18 +94,43 @@ public class Structure {
         visited.remove(current);
     }
 
-    private boolean validateFullyConnected(Module current, Set<Module> visited) {
+    private List<Module> getTopologicallySortedModules(Module current, List<Module> visited) {
         visited.add(current);
-        if(visited.size() == modules.size()) return true;
+        if(visited.size() == modules.size()) return visited;
         for (Module module: getConnectedModules(current)) {
             if(visited.contains(module)) continue;
-            if(validateFullyConnected(module, visited)) return true;
+            visited = getTopologicallySortedModules(module, visited);
+            if(visited.size() == modules.size()) return visited;
+        }
+        throw new RuntimeException("Not all modules are connected together!");
+    }
+
+    private List<Connection> getTopologicallySortedConnections(Connection current, List<Connection> visited) {
+        visited.add(current);
+        if(visited.size() == connections.size()) return visited;
+        for (Connection connection: getConnections(current.getModuleA())) {
+            if(visited.contains(connection)) continue;
+            visited = getTopologicallySortedConnections(connection, visited);
+            if(visited.size() == connections.size()) return visited;
+        }
+        for (Connection connection: getConnections(current.getModuleB())) {
+            if(visited.contains(connection)) continue;
+            visited = getTopologicallySortedConnections(connection, visited);
+            if(visited.size() == connections.size()) return visited;
         }
         throw new RuntimeException("Not all modules are connected together!");
     }
 
     public Set<Module> getModules() {
         return modules;
+    }
+
+    public List<Module> getTopologicallySortedModules() {
+        return getTopologicallySortedModules(modules.iterator().next(), new ArrayList<>());
+    }
+
+    public List<Connection> getTopologicallySortedConnections() {
+        return getTopologicallySortedConnections(connections.iterator().next(), new ArrayList<>());
     }
 
     public List<Connection> getAllConnections() {
