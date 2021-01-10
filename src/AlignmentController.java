@@ -44,25 +44,27 @@ public class AlignmentController {
         Supervisor.importEdmo("2", new Vector(0, 1, 0));
     }
 
-    private static void connect(WebotsNode edmo1, WebotsNode edmo2, int connector1, int connector2) {
-        WebotsNode connectorEdmo1 = new WebotsNode(SupervisorController.getConnectors(edmo1).get(connector1));
-        WebotsNode connectorEdmo2 = new WebotsNode(SupervisorController.getConnectors(edmo2).get(connector2));
+    private static void connect(WebotsNode addon, WebotsNode base, int connector1, int connector2) {
+        WebotsNode connectorAddon = new WebotsNode(SupervisorController.getConnectors(addon).get(connector1));
+        WebotsNode connectorBase = new WebotsNode(SupervisorController.getConnectors(base).get(connector2));
 
-        edmo1.setRotation(new RotationVector(0, 1, 0, 0));
-
-        Supervisor.update();
-
-        Vector zAxisCE1 = connectorEdmo1.getZAxisOrientation();
-        Vector zAxisCE2 = connectorEdmo2.getZAxisOrientation().multiply(-1);
-        RotationVector vecRotFromCE1ToCE2 = zAxisCE1.rotationVector(zAxisCE2);
-        edmo1.setRotation(vecRotFromCE1ToCE2);
+        addon.setRotation(new RotationVector(0, 1, 0, 0));
 
         Supervisor.update();
 
-        Vector posCE1 = connectorEdmo1.getPosition();
-        Vector posCE2 = connectorEdmo2.getPosition();
-        Vector vecFromCE1ToCE2 = posCE2.subtract(posCE1);
-        edmo1.setTranslation(edmo1.getPosition().add(vecFromCE1ToCE2));
+        Vector zAxisOfAddonConnector = connectorAddon.getZAxisOrientation();
+        Vector zAxisOfBaseConnector = connectorBase.getZAxisOrientation().multiply(-1);
+        RotationVector rotateFromAddonConnectorToBaseConnector =
+            zAxisOfAddonConnector.rotationVector(zAxisOfBaseConnector);
+        addon.setRotation(rotateFromAddonConnectorToBaseConnector);
+
+        Supervisor.update();
+
+        Vector addonConnectorPosition = connectorAddon.getPosition();
+        Vector baseConnectorPosition = connectorBase.getPosition();
+        Vector translationFromAddonConnectorToBaseConnector =
+            baseConnectorPosition.subtract(addonConnectorPosition);
+        addon.setTranslation(addon.getPosition().add(translationFromAddonConnectorToBaseConnector));
 
         Supervisor.update();
     }
