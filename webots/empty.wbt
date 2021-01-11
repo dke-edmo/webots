@@ -11,7 +11,8 @@ TexturedBackground {
 TexturedBackgroundLight {
 }
 RectangleArena {
-  floorSize 10 10
+  floorSize 20 20
+  wallHeight 0.5
 }
 DEF supervisor Robot {
   translation 0.1 0 0.1

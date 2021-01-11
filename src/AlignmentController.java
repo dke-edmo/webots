@@ -24,13 +24,21 @@ public class AlignmentController {
 
         System.out.println("Working Directory = " + System.getProperty("user.dir"));
 
-        importEdmos();
-        WebotsNode edmo1 = Supervisor.getFromDef("edmo1");
-        WebotsNode edmo2 = Supervisor.getFromDef("edmo2");
+        WebotsNode edmo1 = Supervisor.importEdmo("1", new Vector(0, 1, 0));
+        WebotsNode edmo2 = Supervisor.importEdmo("2", new Vector(2, 1, 2));
         connect(
             edmo1, edmo2,
             getConnector(edmo1, 0), getConnector(edmo2, 1)
         );
+
+
+        WebotsNode edmo3 = Supervisor.importEdmo("3", new Vector(0, 1, 0));
+        WebotsNode edmo4 = Supervisor.importEdmo("4", new Vector(-2, 1, -2));
+        connect(
+            edmo3, edmo4,
+            getConnector(edmo3, 0), getConnector(edmo4, 1)
+        );
+
 //        edmo1.getNode().remove();
 //        edmo2.getNode().remove();
 
