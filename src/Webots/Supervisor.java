@@ -15,6 +15,10 @@ public class Supervisor {
         timeStep = (int)Math.round(supervisor.getBasicTimeStep());
     }
 
+    public static int getTimeStep() {
+        return timeStep;
+    }
+
     public static com.cyberbotics.webots.controller.Supervisor getSupervisor() {
         return supervisor;
     }
@@ -47,6 +51,7 @@ public class Supervisor {
     }
 
     public static void update() {
+        supervisor.simulationResetPhysics();
         nextTimeStep();
         supervisor.simulationResetPhysics();
     }
