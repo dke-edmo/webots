@@ -1,8 +1,6 @@
 package Utility;
 
-import Utility.Vector;
 import Webots.IMUReadings;
-import Webots.IMUSensor;
 import Webots.IMUReading;
 
 import java.util.ArrayList;
@@ -20,15 +18,16 @@ public class Integration {
             name.add(new IMUReading(accs, accs));
         }
         //Vector displacement = getDisplacement(IMUReadings.read("./resources/reading1.ser"));
-        Vector displacement = getDisplacement(new IMUReadings(name));
+        Vector displacement = getDisplacementHistory(new IMUReadings(name));
         System.out.println(displacement.toString());
     }
 
-    public static Vector getDisplacement(IMUReadings readings) {
+    public static Vector getDisplacementHistory(IMUReadings readings) {
 //        Supervisor supervisor = new Supervisor();
 //        double timeStep =  supervisor.getBasicTimeStep();
         double timeStep = 1;
 
+        Vector history = new Vector(0, 0, 0);
         Vector displacement = new Vector(0, 0, 0);
         Vector velocity = new Vector(0, 0, 0);  //Must start sith no velocity
 
@@ -37,10 +36,11 @@ public class Integration {
         for (IMUReading reading : readings.getFrom(1)) {
             Vector next = reading.getLinear();
             displacement = displacement.add(findDisplacementVector(initial, next, velocity, timeStep));
+            history = history.append(displacement);
             velocity = velocity.add(initial.add(next).multiply(timeStep / 2));  //Calculates new velocity by finding area under the curve
             initial = next;
         }
-        return displacement;
+        return history;
     }
 
 

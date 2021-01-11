@@ -247,6 +247,10 @@ public class Vector implements Serializable {
         return Math.max(Math.min(dotProduct(other) / (length() * other.length()), 1), -1);
     }
 
+    public Vector append(Vector appendix) {
+        return new Vector(vector, appendix.getDoubleArray());
+    }
+
     public boolean isEqualSize(Vector other) {
         return this.getSize() == other.getSize();
     }
