@@ -41,19 +41,6 @@ public class AlignmentController {
 //        edmo1.getNode().remove();
 //        edmo2.getNode().remove();
 
-//        testAllConnections();
-
-//        Module moduleA = new Module();
-//        Module moduleL = new Module();
-//        Module moduleR = new Module();
-//
-//        Structure structure = new Structure(
-//            new Connection(moduleA, moduleL, Connector.L, Connector.B, Orientation.H),
-//            new Connection(moduleA, moduleR, Connector.R, Connector.B, Orientation.H)
-//        );
-//
-//        createStructure(structure);
-
         while (Supervisor.nextTimeStep() != -1) {
         }
 
