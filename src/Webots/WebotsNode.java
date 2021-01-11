@@ -37,24 +37,28 @@ public class WebotsNode extends Module {
             );
     }
 
-    public Node getChildFromTypeName(String typeName, String subTree) {
+    public WebotsNode getChildNodeFromField(String field) {
+        return new WebotsNode(node.getField(field).getSFNode());
+    }
+
+    public WebotsNode getChildFromTypeName(String typeName, String subTree) {
         Field childrenFiled = node.getField(subTree);
         for (int i = 0; i < childrenFiled.getCount(); i++) {
             Node childNode = childrenFiled.getMFNode(i);
             if(childNode.getTypeName().equals(typeName)) {
-                return childNode;
+                return new WebotsNode(childNode);
             }
         }
         throw new RuntimeException("Node of type: " + typeName + " not found in sub tree " + subTree);
     }
 
-    public ArrayList<Node> getChildrenFromTypeName(String typeName, String subTree) {
+    public ArrayList<WebotsNode> getChildrenFromTypeName(String typeName, String subTree) {
         Field childrenFiled = node.getField(subTree);
-        ArrayList<Node> childrenNodes = new ArrayList<>();
+        ArrayList<WebotsNode> childrenNodes = new ArrayList<>();
         for (int i = 0; i < childrenFiled.getCount(); i++) {
             Node childNode = childrenFiled.getMFNode(i);
             if(childNode.getTypeName().equals(typeName)){
-                childrenNodes.add(childNode);
+                childrenNodes.add(new WebotsNode(childNode));
             }
         }
         return childrenNodes;

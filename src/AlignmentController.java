@@ -17,7 +17,7 @@ import java.util.*;
  */
 public class AlignmentController {
 
-    static Map<Module, WebotsNode> modules = new HashMap<>();
+    static Map<Module, EDMO> modules = new HashMap<>();
 
     public static void main(String[] args) {
 
@@ -27,7 +27,7 @@ public class AlignmentController {
         EDMO edmo2 = Supervisor.importEdmo("2", new Vector(2, 1, 2));
         connect(
             edmo1, edmo2,
-            getConnector(edmo1, 0), getConnector(edmo2, 1)
+            edmo1.getConnector(0), edmo2.getConnector(1)
         );
 
 
@@ -35,7 +35,7 @@ public class AlignmentController {
         EDMO edmo4 = Supervisor.importEdmo("4", new Vector(-2, 1, -2));
         connect(
             edmo3, edmo4,
-            getConnector(edmo3, 0), getConnector(edmo4, 1)
+            edmo3.getConnector(0), edmo4.getConnector(1)
         );
 
 //        edmo1.getNode().remove();
@@ -60,13 +60,13 @@ public class AlignmentController {
     }
 
     private static void createConnection(Connection connection) {
-        WebotsNode addon = getEDMO(connection.getModuleA());
-        WebotsNode base = getEDMO(connection.getModuleB());
+        EDMO addon = getEDMO(connection.getModuleA());
+        EDMO base = getEDMO(connection.getModuleB());
         connect(
             addon,
             base,
-            getConnector(addon, connection.getConnectorA()),
-            getConnector(base, connection.getConnectorB())
+            addon.getConnector(connection.getConnectorA()),
+            base.getConnector(connection.getConnectorB())
         );
     }
 
@@ -76,13 +76,13 @@ public class AlignmentController {
             Module addonModule = connectedModules.contains(connection.getModuleA())
                 ? connection.getModuleB() : connection.getModuleA();
             Module baseModule = connection.getOtherModule(addonModule);
-            WebotsNode addon = getEDMO(addonModule);
-            WebotsNode base = getEDMO(baseModule);
+            EDMO addon = getEDMO(addonModule);
+            EDMO base = getEDMO(baseModule);
             connect(
                 addon,
                 base,
-                getConnector(addon, connection.getConnectorByModule(addonModule)),
-                getConnector(base, connection.getConnectorByModule(baseModule))
+                addon.getConnector(connection.getConnectorByModule(addonModule)),
+                base.getConnector(connection.getConnectorByModule(baseModule))
             );
             connectedModules.add(connection.getModuleA());
             connectedModules.add(connection.getModuleB());
@@ -93,13 +93,12 @@ public class AlignmentController {
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
                 System.out.println(i + " " + j);
-                importEdmos();
-                WebotsNode edmo1 = Supervisor.getFromDef("edmo1");
-                WebotsNode edmo2 = Supervisor.getFromDef("edmo2");
+                EDMO edmo1 = Supervisor.importEdmo("1", new Vector(2, 1, 2));
+                EDMO edmo2 = Supervisor.importEdmo("2", new Vector(0, 1, 0));
 //                edmo2.setRotation(new RotationVector(Math.random(), Math.random(), Math.random(), Math.random()));
                 connect(
                     edmo1, edmo2,
-                    getConnector(edmo1, i), getConnector(edmo2, j)
+                    edmo1.getConnector(i), edmo2.getConnector(j)
                 );
                 for (int k = 0; k < 100; k++) {
                     Supervisor.nextTimeStep();
@@ -110,7 +109,7 @@ public class AlignmentController {
         }
     }
 
-    private static WebotsNode getEDMO(Module module) {
+    private static EDMO getEDMO(Module module) {
         if(!modules.containsKey(module)) {
             int id = modules.size() + 1;
             modules.put(
@@ -119,11 +118,6 @@ public class AlignmentController {
             );
         }
         return modules.get(module);
-    }
-
-    private static void importEdmos() {
-        Supervisor.importEdmo("1", new Vector(2, 1, 2));
-        Supervisor.importEdmo("2", new Vector(0, 1, 0));
     }
 
     private static void connect(WebotsNode addon, WebotsNode base, WebotsNode connectorAddon, WebotsNode connectorBase) {
@@ -152,23 +146,4 @@ public class AlignmentController {
 
         Supervisor.update();
     }
-
-    public static WebotsNode getConnector(WebotsNode edmo, int connectorId) {
-        return new WebotsNode(SupervisorController.getConnectors(edmo).get(connectorId));
-    }
-
-    public static WebotsNode getConnector(WebotsNode edmo, Connector connector) {
-        return getConnectors(edmo).get(connector);
-    }
-
-    public static Map<Connector, WebotsNode> getConnectors(WebotsNode edmo) {
-        ArrayList<Node> connectors = SupervisorController.getConnectors(edmo);
-        Map<Connector, WebotsNode> connectorsMap = new HashMap<>();
-        connectorsMap.put(Connector.B, new WebotsNode(connectors.get(0)));
-        connectorsMap.put(Connector.L, new WebotsNode(connectors.get(1)));
-        connectorsMap.put(Connector.R, new WebotsNode(connectors.get(2)));
-        connectorsMap.put(Connector.T, new WebotsNode(connectors.get(3)));
-        return connectorsMap;
-    }
-
 }
