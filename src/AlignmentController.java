@@ -6,8 +6,7 @@ import EDMO.Structure;
 import Utility.Matrix;
 import Utility.RotationVector;
 import Utility.Vector;
-import Webots.Supervisor;
-import Webots.WebotsNode;
+import Webots.*;
 import com.cyberbotics.webots.controller.Field;
 import com.cyberbotics.webots.controller.Node;
 
@@ -24,16 +23,16 @@ public class AlignmentController {
 
         System.out.println("Working Directory = " + System.getProperty("user.dir"));
 
-        WebotsNode edmo1 = Supervisor.importEdmo("1", new Vector(0, 1, 0));
-        WebotsNode edmo2 = Supervisor.importEdmo("2", new Vector(2, 1, 2));
+        EDMO edmo1 = Supervisor.importEdmo("1", new Vector(0, 1, 0));
+        EDMO edmo2 = Supervisor.importEdmo("2", new Vector(2, 1, 2));
         connect(
             edmo1, edmo2,
             getConnector(edmo1, 0), getConnector(edmo2, 1)
         );
 
 
-        WebotsNode edmo3 = Supervisor.importEdmo("3", new Vector(0, 1, 0));
-        WebotsNode edmo4 = Supervisor.importEdmo("4", new Vector(-2, 1, -2));
+        EDMO edmo3 = Supervisor.importEdmo("3", new Vector(0, 1, 0));
+        EDMO edmo4 = Supervisor.importEdmo("4", new Vector(-2, 1, -2));
         connect(
             edmo3, edmo4,
             getConnector(edmo3, 0), getConnector(edmo4, 1)

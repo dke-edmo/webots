@@ -23,7 +23,7 @@ public class Supervisor {
         return supervisor;
     }
 
-    public static WebotsNode importEdmo(String id, Vector location) {
+    public static EDMO importEdmo(String id, Vector location) {
 
         getRoot()
             .importChildFromString(
@@ -32,12 +32,21 @@ public class Supervisor {
                     .replaceAll("__id__", id)
             );
 
-        WebotsNode edmo = new WebotsNode(supervisor.getFromDef("edmo" + id));
+        ObjectCommunicator<Double, IMUSensor.IMUReading> communicator = new ObjectCommunicator<>(
+            supervisor.getEmitter("emitter" + id), supervisor.getReceiver("receiver" + id), timeStep
+        );
+
+        EDMO edmo = new EDMO(
+            supervisor.getFromDef("edmo" + id),
+            communicator
+        );
         edmo.setTranslation(location);
         update();
 
         return edmo;
+
     }
+
     public static WebotsNode getFromDef(String def) {
         return new WebotsNode(supervisor.getFromDef(def));
     }
