@@ -1,3 +1,4 @@
+import Webots.IMUReading;
 import Webots.IMUSensor;
 import Webots.ObjectCommunicator;
 import com.cyberbotics.webots.controller.*;

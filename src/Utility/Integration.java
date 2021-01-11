@@ -3,8 +3,7 @@ package Utility;
 import Utility.Vector;
 import Webots.IMUReadings;
 import Webots.IMUSensor;
-import Webots.IMUSensor.IMUReading;
-import com.cyberbotics.webots.controller.Supervisor;
+import Webots.IMUReading;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,9 +25,9 @@ public class Integration {
     }
 
     public static Vector getDisplacement(IMUReadings readings) {
-        Supervisor supervisor = new Supervisor();
-        double timeStep =  supervisor.getBasicTimeStep();
-//        double timeStep = 1;
+//        Supervisor supervisor = new Supervisor();
+//        double timeStep =  supervisor.getBasicTimeStep();
+        double timeStep = 1;
 
         Vector displacement = new Vector(0, 0, 0);
         Vector velocity = new Vector(0, 0, 0);  //Must start sith no velocity

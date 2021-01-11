@@ -32,7 +32,7 @@ public class Supervisor {
                     .replaceAll("__id__", id)
             );
 
-        ObjectCommunicator<Double, IMUSensor.IMUReading> communicator = new ObjectCommunicator<>(
+        ObjectCommunicator<Double, IMUReading> communicator = new ObjectCommunicator<>(
             supervisor.getEmitter("emitter" + id), supervisor.getReceiver("receiver" + id), timeStep
         );
 

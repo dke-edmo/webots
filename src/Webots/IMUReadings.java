@@ -1,7 +1,7 @@
 package Webots;
 
 import Utility.Serializer;
-import Webots.IMUSensor.IMUReading;
+import Webots.IMUReading;
 import Utility.Vector;
 
 import java.io.Serializable;
