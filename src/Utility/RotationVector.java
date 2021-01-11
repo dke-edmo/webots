@@ -15,6 +15,13 @@ public class RotationVector extends Vector {
         super(vectors);
     }
 
+    public RotationVector(Vector axisVector, double angle) {
+        super(
+            axisVector.unitVector().getDoubleArray(),
+            new Vector(angle).getDoubleArray()
+        );
+    }
+
     public RotationVector addRotation(RotationVector vector) {
         Matrix firstRotation = this.rotationMatrix();
         Matrix secondRotation = vector.rotationMatrix();

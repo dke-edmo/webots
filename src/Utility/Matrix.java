@@ -1,5 +1,7 @@
 package Utility;
 
+import java.util.Arrays;
+
 public class Matrix {
 
     private final int rows;
@@ -111,4 +113,41 @@ public class Matrix {
         return new Vector(column);
     }
 
+    public double getTrace() {
+        if (this.rows != this.columns) throw new RuntimeException("Trace can be computed only for square matrix");
+        double trace = 0;
+        for (int i = 0; i < this.rows; i++) {
+            trace += matrix[i][i];
+        }
+        return trace;
+    }
+
+    public RotationVector getRotationVector() {
+        if (this.rows != 3 || this.columns != 3) throw new RuntimeException("Rotation matrix must be 3x3!");
+        Vector axisVector = new Vector(
+            matrix[2][1] - matrix[1][2],
+            matrix[0][2] - matrix[2][0],
+            matrix[1][0] - matrix[0][1]
+        );
+        if(axisVector.length() == 0) return new RotationVector(0, 1, 0, 0);
+        return new RotationVector(
+            axisVector,
+            Math.atan2(axisVector.length(), getTrace() - 1)
+        );
+    }
+
+    public String toString() {
+        StringBuilder builder = new StringBuilder("Matrix{" +
+            "rows=" + rows +
+            ", columns=" + columns +
+            "} =\n");
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < columns; j++) {
+                builder.append(Utils.round(matrix[i][j]));
+                builder.append("\t");
+            }
+            builder.append("\n");
+        }
+        return builder.toString();
+    }
 }
