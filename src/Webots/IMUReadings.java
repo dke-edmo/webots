@@ -33,6 +33,10 @@ public class IMUReadings implements Serializable {
         return new IMUReadings(readings.subList(from, to));
     }
 
+    public List<IMUReading> getFrom(int from) {
+        return new IMUReadings(readings.subList(from, readings.size())).getAll();
+    }
+
     public void add(IMUReading reading) {
         readings.add(reading);
     }
