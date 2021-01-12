@@ -1,5 +1,7 @@
 package Webots;
 
+import Utility.RotationVector;
+import Utility.Vector;
 import com.cyberbotics.webots.controller.Field;
 import com.cyberbotics.webots.controller.Node;
 import EDMO.Connection.Connector;
@@ -10,9 +12,11 @@ import java.util.Map;
 
 public class EDMO extends WebotsNode {
 
-    private final ObjectCommunicator<Double, IMUReading> communicator;
     private List<WebotsNode> connectorsList = new ArrayList<>();
     private final Map<Connector, WebotsNode> connectorsMap = new HashMap<>();
+
+    private final ObjectCommunicator<Double, IMUReading> communicator;
+    private final IMUReadings imuReadings = new IMUReadings();
 
     public EDMO(Node node, ObjectCommunicator<Double, IMUReading> communicator) {
         super(node);
@@ -34,6 +38,19 @@ public class EDMO extends WebotsNode {
 
     }
 
+    public Vector getLastLinearAccelerationReading() {
+        return getLastReading().getLinear();
+    }
+
+    public IMUReading getLastReading() {
+        return getIMUReadings().getLast();
+    }
+
+    public IMUReadings getIMUReadings() {
+        receiveReadings();
+        return imuReadings;
+    }
+
     public ObjectCommunicator<Double, IMUReading> getCommunicator() {
         return communicator;
     }
@@ -44,6 +61,10 @@ public class EDMO extends WebotsNode {
 
     public WebotsNode getConnector(Connector connector) {
         return connectorsMap.get(connector);
+    }
+
+    private void receiveReadings() {
+        while (communicator.hasNext()) imuReadings.add(getCommunicator().receive());
     }
 
 }

@@ -39,10 +39,10 @@ public class ObjectCommunicator<E extends Serializable, R extends  Serializable>
     }
 
     public R receive() {
-        if(receiver.getQueueLength() != 0) {
+        if (receiver.getQueueLength() != 0) {
             byte[] byteArray = receiver.getData();
             //noinspection unchecked
-            R object = (R)ByteArrayConverter.fromByteArray(byteArray);
+            R object = (R) ByteArrayConverter.fromByteArray(byteArray);
             receiver.nextPacket();
             return object;
         } else {
@@ -50,6 +50,10 @@ public class ObjectCommunicator<E extends Serializable, R extends  Serializable>
                 "Nothing to receive! Please, check with hasNext() before receiving."
             );
         }
+    }
+
+    public void clearReceiver() {
+        while (hasNext()) receive();
     }
 
 }

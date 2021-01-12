@@ -24,7 +24,7 @@ public class AlignmentController {
         System.out.println("Working Directory = " + System.getProperty("user.dir"));
 
         EDMO edmo1 = Supervisor.importEdmo("1", new Vector(0, 1, 0));
-        EDMO edmo2 = Supervisor.importEdmo("2", new Vector(2, 1, 2));
+        EDMO edmo2 = Supervisor.importEdmo("2", new Vector(3, 1, 3));
         connect(
             edmo1, edmo2,
             edmo1.getConnector(0), edmo2.getConnector(1)
@@ -32,29 +32,48 @@ public class AlignmentController {
 
 
         EDMO edmo3 = Supervisor.importEdmo("3", new Vector(0, 1, 0));
-        EDMO edmo4 = Supervisor.importEdmo("4", new Vector(-2, 1, -2));
+        EDMO edmo4 = Supervisor.importEdmo("4", new Vector(-3, 1, -3));
         connect(
             edmo3, edmo4,
             edmo3.getConnector(0), edmo4.getConnector(1)
         );
 
+        EDMOCollection edmos = new EDMOCollection(
+            edmo1, edmo2, edmo3, edmo4
+        );
+
 //        edmo1.getNode().remove();
 //        edmo2.getNode().remove();
 
-//        testAllConnections();
-
-//        Module moduleA = new Module();
-//        Module moduleL = new Module();
-//        Module moduleR = new Module();
-//
-//        Structure structure = new Structure(
-//            new Connection(moduleA, moduleL, Connector.L, Connector.B, Orientation.H),
-//            new Connection(moduleA, moduleR, Connector.R, Connector.B, Orientation.H)
-//        );
-//
-//        createStructure(structure);
-
+        int counter = 0;
+        IMUReadings readingsHardware = new IMUReadings();
+        IMUReadings readingsSimulation = new IMUReadings();
         while (Supervisor.nextTimeStep() != -1) {
+            if(counter < 100) {
+                // find stable orientation
+                if(counter == 10) edmos.getStream().forEach(e -> e.getCommunicator().emit(-Math.PI/2));
+                if(counter == 70) edmos.getStream().forEach(e -> e.getCommunicator().emit(Math.PI/2));
+            } else if(counter < 150) {
+                // stop movement
+                edmos.clearReceiver();
+                edmos.emit(0);
+            } else if(counter < 250) {
+                if(counter == 150) edmo1.getCommunicator().emit(Math.PI/2);
+                if(counter == 200) edmo1.getCommunicator().emit(-Math.PI/2);
+                if(counter == 150) edmo3.getCommunicator().emit(Math.PI/2);
+                if(counter == 200) edmo3.getCommunicator().emit(-Math.PI/2);
+            } else if(counter == 250) {
+                readingsHardware = edmo1.getIMUReadings();
+                readingsSimulation = edmo3.getIMUReadings();
+                System.out.println("Similarity: " + readingsHardware.toVector().normalize().cosineSimilarity(readingsSimulation.toVector().normalize()));
+                System.out.println("Distance: " + readingsHardware.toVector().normalize().euclideanDistance(readingsSimulation.toVector().normalize()));
+            } else {
+//                edmos.getStream().forEach(e -> {
+//                    System.out.println(e.getDef() + ": " + e.getLastLinearAccelerationReading());
+//                });
+//                System.out.println("\n");
+            }
+            counter++;
         }
 
     }

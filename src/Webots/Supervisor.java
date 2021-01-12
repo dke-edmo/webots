@@ -3,8 +3,6 @@ package Webots;
 import Utility.FileSystem;
 import Utility.Vector;
 
-import java.util.Map;
-
 public class Supervisor {
 
     private static final int timeStep;
@@ -24,7 +22,6 @@ public class Supervisor {
     }
 
     public static EDMO importEdmo(String id, Vector location) {
-
         getRoot()
             .importChildFromString(
                 FileSystem
@@ -32,19 +29,22 @@ public class Supervisor {
                     .replaceAll("__id__", id)
             );
 
-        ObjectCommunicator<Double, IMUReading> communicator = new ObjectCommunicator<>(
-            supervisor.getEmitter("emitter" + id), supervisor.getReceiver("receiver" + id), timeStep
-        );
-
-        EDMO edmo = new EDMO(
-            supervisor.getFromDef("edmo" + id),
-            communicator
-        );
+        EDMO edmo = getEdmoById(id);
         edmo.setTranslation(location);
         update();
 
         return edmo;
+    }
 
+    public static EDMO getEdmoById(String id) {
+        return new EDMO(
+            supervisor.getFromDef("edmo" + id),
+            new ObjectCommunicator<>(
+                supervisor.getEmitter("emitter" + id),
+                supervisor.getReceiver("receiver" + id),
+                timeStep
+            )
+        );
     }
 
     public static WebotsNode getFromDef(String def) {

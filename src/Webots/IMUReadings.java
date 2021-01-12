@@ -25,6 +25,10 @@ public class IMUReadings implements Serializable {
         return readings;
     }
 
+    public IMUReading getLast() {
+        return getOne(readings.size() - 1);
+    }
+
     public IMUReading getOne(int index) {
         return readings.get(index);
     }
