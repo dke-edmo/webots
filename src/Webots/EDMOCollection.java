@@ -1,18 +1,27 @@
 package Webots;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
 public class EDMOCollection {
 
-    List<EDMO> edmos;
+    private List<EDMO> edmos;
 
     public EDMOCollection(EDMO ...edmos) {
         this(List.of(edmos));
     }
 
     public EDMOCollection(List<EDMO> edmos) {
-        this.edmos = edmos;
+        this.edmos = new ArrayList<>(edmos);
+    }
+
+    public void add(EDMO edmo) {
+        edmos.add(edmo);
+    }
+
+    public void add(EDMOCollection edmos) {
+        this.edmos.addAll(edmos.getEdmos());
     }
 
     public List<EDMO> getEdmos() {

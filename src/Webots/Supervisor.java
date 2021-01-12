@@ -22,6 +22,13 @@ public class Supervisor {
         return supervisor;
     }
 
+    public static void removeAllEdmos() {
+        for (int i = 1; i < edmoCounter; i++) {
+            getEdmoById(i).getNode().remove();
+        }
+        edmoCounter = 1;
+    }
+
     public static EDMO importEdmo(Vector location) {
         String id = String.valueOf(edmoCounter++);
         getRoot()
@@ -36,6 +43,10 @@ public class Supervisor {
         update();
 
         return edmo;
+    }
+
+    public static EDMO getEdmoById(int id) {
+        return getEdmoById(String.valueOf(id));
     }
 
     public static EDMO getEdmoById(String id) {
