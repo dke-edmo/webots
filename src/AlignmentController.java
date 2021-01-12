@@ -47,7 +47,7 @@ public class AlignmentController {
         edmo2Collection.add(edmo2);
 
         EDMOCollection edmosSimulation = new EDMOCollection();
-        for (int i = 1; i < 5; i++) {
+        for (int i = 1; i < 4; i++) {
 
             for (int m = -1; m <= 1; m+=2) {
                 for (int n = -1; n <= 1; n+=2) {
@@ -105,10 +105,10 @@ public class AlignmentController {
                     metrics.get("Normalized Vector Similarity")
                         .add(readingsVecHardware.normalize().cosineSimilarity(readingsVecSimulation.normalize()));
                     metrics.get("Not Normalized Vector Similarity")
-                        .add(readingsVecHardware.normalize().cosineSimilarity(readingsVecSimulation.normalize()));
+                        .add(readingsVecHardware.cosineSimilarity(readingsVecSimulation));
 
                     metrics.get("Normalized Vector Distance")
-                        .add(readingsVecHardware.euclideanDistance(readingsVecSimulation));
+                        .add(readingsVecHardware.normalize().euclideanDistance(readingsVecSimulation.normalize()));
                     metrics.get("Not Normalized Vector Distance")
                         .add(readingsVecHardware.euclideanDistance(readingsVecSimulation));
                 }
