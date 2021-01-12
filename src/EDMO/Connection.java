@@ -14,7 +14,7 @@ import EDMO.Exceptions.InvalidStructure;
 public class Connection {
 
     public enum Connector {
-        T, B, L, R, // Top, Bottom, Left, Right
+        B, R, L, T, // Bottom, Right, Left, Top
     }
 
     public enum Orientation {
@@ -28,6 +28,21 @@ public class Connection {
     private Connector connectorB;
 
     private Orientation orientation;
+
+    public Connection(
+        Module moduleA,
+        Module moduleB,
+        Connector connectorA,
+        Connector connectorB
+    ) {
+        this(
+            moduleA,
+            moduleB,
+            connectorA,
+            connectorB,
+            Orientation.H
+        );
+    }
 
     public Connection(
         Module moduleA,
@@ -67,6 +82,12 @@ public class Connection {
 
     public Connector getConnectorB() {
         return connectorB;
+    }
+
+    public Connector getConnectorByModule(Module module) {
+        if(module == moduleA) return connectorA;
+        if(module == moduleB) return connectorB;
+        throw new RuntimeException("Module: " + module + " does not belong to this connection!");
     }
 
     public Orientation getOrientation() {

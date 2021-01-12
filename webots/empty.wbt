@@ -1,0 +1,56 @@
+#VRML_SIM R2021a utf8
+WorldInfo {
+  coordinateSystem "NUE"
+}
+Viewpoint {
+  orientation 0.08746781598275685 -0.9858994363690419 -0.14265932333504242 3.786154272449898
+  position 10.098739873689349 6.9632962044715985 -14.342607052735339
+}
+TexturedBackground {
+}
+TexturedBackgroundLight {
+}
+RectangleArena {
+  floorSize 20 20
+  wallHeight 0.5
+}
+DEF supervisor Robot {
+  translation 0.1 0 0.1
+  children [
+    DEF emitter1 Emitter {
+      name "emitter1"
+      channel 1
+    }
+    DEF receiver1 Receiver {
+      name "receiver1"
+      channel 1
+    }
+    DEF emitter2 Emitter {
+      name "emitter2"
+      channel 2
+    }
+    DEF receiver2 Receiver {
+      name "receiver2"
+      channel 2
+    }
+    DEF emitter3 Emitter {
+      name "emitter3"
+      channel 3
+    }
+    DEF receiver3 Receiver {
+      name "receiver3"
+      channel 3
+    }
+    DEF emitter4 Emitter {
+      name "emitter4"
+      channel 4
+    }
+    DEF receiver4 Receiver {
+      name "receiver4"
+      channel 4
+    }
+  ]
+  name "supervisor"
+  controller "AlignmentController"
+  supervisor TRUE
+}

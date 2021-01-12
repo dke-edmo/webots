@@ -1,7 +1,7 @@
 package Webots;
 
 import Utility.Serializer;
-import Webots.IMUSensor.IMUReading;
+import Webots.IMUReading;
 import Utility.Vector;
 
 import java.io.Serializable;
@@ -31,6 +31,10 @@ public class IMUReadings implements Serializable {
 
     public IMUReadings getSlice(int from, int to) {
         return new IMUReadings(readings.subList(from, to));
+    }
+
+    public List<IMUReading> getFrom(int from) {
+        return new IMUReadings(readings.subList(from, readings.size())).getAll();
     }
 
     public void add(IMUReading reading) {
