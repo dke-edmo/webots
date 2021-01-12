@@ -7,6 +7,7 @@ public class Supervisor {
 
     private static final int timeStep;
     private static final com.cyberbotics.webots.controller.Supervisor supervisor;
+    private static int edmoCounter = 1;
 
     static {
         supervisor = new com.cyberbotics.webots.controller.Supervisor();
@@ -21,7 +22,8 @@ public class Supervisor {
         return supervisor;
     }
 
-    public static EDMO importEdmo(String id, Vector location) {
+    public static EDMO importEdmo(Vector location) {
+        String id = String.valueOf(edmoCounter++);
         getRoot()
             .importChildFromString(
                 FileSystem

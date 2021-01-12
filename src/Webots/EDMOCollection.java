@@ -15,6 +15,10 @@ public class EDMOCollection {
         this.edmos = edmos;
     }
 
+    public List<EDMO> getEdmos() {
+        return edmos;
+    }
+
     public void emit(double hingePosition) {
         getStream().forEach(e -> e.getCommunicator().emit(hingePosition));
     }

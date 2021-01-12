@@ -23,20 +23,25 @@ public class AlignmentController {
 
         System.out.println("Working Directory = " + System.getProperty("user.dir"));
 
-        EDMO edmo1 = Supervisor.importEdmo("1", new Vector(0, 1, 0));
-        EDMO edmo2 = Supervisor.importEdmo("2", new Vector(3, 1, 3));
-        connect(
-            edmo1, edmo2,
-            edmo1.getConnector(0), edmo2.getConnector(1)
-        );
+        EDMOCollection edmoCollection = createSimpleEDMOStructure(new Vector(3, 0, 3), 0, 1);
+        EDMO edmo1 = edmoCollection.getEdmos().get(0);
+        EDMO edmo2 = edmoCollection.getEdmos().get(1);
 
 
-        EDMO edmo3 = Supervisor.importEdmo("3", new Vector(0, 1, 0));
-        EDMO edmo4 = Supervisor.importEdmo("4", new Vector(-3, 1, -3));
-        connect(
-            edmo3, edmo4,
-            edmo3.getConnector(0), edmo4.getConnector(1)
-        );
+        EDMOCollection edmoCollection2 = createSimpleEDMOStructure(new Vector(-3, 0, -3), 0, 1);
+        EDMO edmo3 = edmoCollection2.getEdmos().get(0);
+        EDMO edmo4 = edmoCollection2.getEdmos().get(1);
+
+        createSimpleEDMOStructure(new Vector(3, 0, -3), 0, 1);
+        createSimpleEDMOStructure(new Vector(-3, 0, 3), 0, 1);
+
+        for (int i = 2; i < 5; i++) {
+            createSimpleEDMOStructure(new Vector(3, 0, -3).multiply(i), 0, 1);
+            createSimpleEDMOStructure(new Vector(-3, 0, 3).multiply(i), 0, 1);
+            createSimpleEDMOStructure(new Vector(3, 0, 3).multiply(i), 0, 1);
+            createSimpleEDMOStructure(new Vector(-3, 0, -3).multiply(i), 0, 1);
+        }
+
 
         EDMOCollection edmos = new EDMOCollection(
             edmo1, edmo2, edmo3, edmo4
@@ -78,6 +83,16 @@ public class AlignmentController {
 
     }
 
+    private static EDMOCollection createSimpleEDMOStructure(Vector placement, int connectorId1, int connectorId2) {
+        EDMO edmo1 = Supervisor.importEdmo(new Vector(0, 1, 0).add(placement));
+        EDMO edmo2 = Supervisor.importEdmo(new Vector(1, 1, 1).add(placement));
+        connect(
+            edmo1, edmo2,
+            edmo1.getConnector(connectorId1), edmo2.getConnector(connectorId2)
+        );
+        return new EDMOCollection(edmo1, edmo2);
+    }
+
     private static void createConnection(Connection connection) {
         EDMO addon = getEDMO(connection.getModuleA());
         EDMO base = getEDMO(connection.getModuleB());
@@ -112,8 +127,8 @@ public class AlignmentController {
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
                 System.out.println(i + " " + j);
-                EDMO edmo1 = Supervisor.importEdmo("1", new Vector(2, 1, 2));
-                EDMO edmo2 = Supervisor.importEdmo("2", new Vector(0, 1, 0));
+                EDMO edmo1 = Supervisor.importEdmo(new Vector(2, 1, 2));
+                EDMO edmo2 = Supervisor.importEdmo(new Vector(0, 1, 0));
 //                edmo2.setRotation(new RotationVector(Math.random(), Math.random(), Math.random(), Math.random()));
                 connect(
                     edmo1, edmo2,
@@ -131,10 +146,7 @@ public class AlignmentController {
     private static EDMO getEDMO(Module module) {
         if(!modules.containsKey(module)) {
             int id = modules.size() + 1;
-            modules.put(
-                module,
-                Supervisor.importEdmo(String.valueOf(id), new Vector(1, 1, 1).multiply(id))
-            );
+            modules.put(module, Supervisor.importEdmo(new Vector(1, 1, 1).multiply(id)));
         }
         return modules.get(module);
     }

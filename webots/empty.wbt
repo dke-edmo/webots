@@ -3,20 +3,27 @@ WorldInfo {
   coordinateSystem "NUE"
 }
 Viewpoint {
-  orientation 0.08746781598275685 -0.9858994363690419 -0.14265932333504242 3.786154272449898
-  position 10.098739873689349 6.9632962044715985 -14.342607052735339
+  orientation 0.11836721403512494 -0.9648148565599337 -0.23477967374284578 3.766580658908588
+  position 35.678577865857 33.14200299784025 -49.984372373927066
 }
 TexturedBackground {
 }
 TexturedBackgroundLight {
 }
 RectangleArena {
-  floorSize 20 20
+  floorSize 100 100
+  floorTileSize 1 1
   wallHeight 0.5
 }
 DEF supervisor Robot {
   translation 0.1 0 0.1
   children [
+    DEF emitter0 Emitter {
+      name "emitter0"
+    }
+    DEF receiver0 Receiver {
+      name "receiver0"
+    }
     DEF emitter1 Emitter {
       name "emitter1"
       channel 1
@@ -48,6 +55,366 @@ DEF supervisor Robot {
     DEF receiver4 Receiver {
       name "receiver4"
       channel 4
+    }
+    DEF emitter5 Emitter {
+      name "emitter5"
+      channel 5
+    }
+    DEF receiver5 Receiver {
+      name "receiver5"
+      channel 5
+    }
+    DEF emitter6 Emitter {
+      name "emitter6"
+      channel 6
+    }
+    DEF receiver6 Receiver {
+      name "receiver6"
+      channel 6
+    }
+    DEF emitter7 Emitter {
+      name "emitter7"
+      channel 7
+    }
+    DEF receiver7 Receiver {
+      name "receiver7"
+      channel 7
+    }
+    DEF emitter8 Emitter {
+      name "emitter8"
+      channel 8
+    }
+    DEF receiver8 Receiver {
+      name "receiver8"
+      channel 8
+    }
+    DEF emitter9 Emitter {
+      name "emitter9"
+      channel 9
+    }
+    DEF receiver9 Receiver {
+      name "receiver9"
+      channel 9
+    }
+    DEF emitter10 Emitter {
+      name "emitter10"
+      channel 10
+    }
+    DEF receiver10 Receiver {
+      name "receiver10"
+      channel 10
+    }
+    DEF emitter11 Emitter {
+      name "emitter11"
+      channel 11
+    }
+    DEF receiver11 Receiver {
+      name "receiver11"
+      channel 11
+    }
+    DEF emitter12 Emitter {
+      name "emitter12"
+      channel 12
+    }
+    DEF receiver12 Receiver {
+      name "receiver12"
+      channel 12
+    }
+    DEF emitter13 Emitter {
+      name "emitter13"
+      channel 13
+    }
+    DEF receiver13 Receiver {
+      name "receiver13"
+      channel 13
+    }
+    DEF emitter14 Emitter {
+      name "emitter14"
+      channel 14
+    }
+    DEF receiver14 Receiver {
+      name "receiver14"
+      channel 14
+    }
+    DEF emitter15 Emitter {
+      name "emitter15"
+      channel 15
+    }
+    DEF receiver15 Receiver {
+      name "receiver15"
+      channel 15
+    }
+    DEF emitter16 Emitter {
+      name "emitter16"
+      channel 16
+    }
+    DEF receiver16 Receiver {
+      name "receiver16"
+      channel 16
+    }
+    DEF emitter17 Emitter {
+      name "emitter17"
+      channel 17
+    }
+    DEF receiver17 Receiver {
+      name "receiver17"
+      channel 17
+    }
+    DEF emitter18 Emitter {
+      name "emitter18"
+      channel 18
+    }
+    DEF receiver18 Receiver {
+      name "receiver18"
+      channel 18
+    }
+    DEF emitter19 Emitter {
+      name "emitter19"
+      channel 19
+    }
+    DEF receiver19 Receiver {
+      name "receiver19"
+      channel 19
+    }
+    DEF emitter20 Emitter {
+      name "emitter20"
+      channel 20
+    }
+    DEF receiver20 Receiver {
+      name "receiver20"
+      channel 20
+    }
+    DEF emitter21 Emitter {
+      name "emitter21"
+      channel 21
+    }
+    DEF receiver21 Receiver {
+      name "receiver21"
+      channel 21
+    }
+    DEF emitter22 Emitter {
+      name "emitter22"
+      channel 22
+    }
+    DEF receiver22 Receiver {
+      name "receiver22"
+      channel 22
+    }
+    DEF emitter23 Emitter {
+      name "emitter23"
+      channel 23
+    }
+    DEF receiver23 Receiver {
+      name "receiver23"
+      channel 23
+    }
+    DEF emitter24 Emitter {
+      name "emitter24"
+      channel 24
+    }
+    DEF receiver24 Receiver {
+      name "receiver24"
+      channel 24
+    }
+    DEF emitter25 Emitter {
+      name "emitter25"
+      channel 25
+    }
+    DEF receiver25 Receiver {
+      name "receiver25"
+      channel 25
+    }
+    DEF emitter26 Emitter {
+      name "emitter26"
+      channel 26
+    }
+    DEF receiver26 Receiver {
+      name "receiver26"
+      channel 26
+    }
+    DEF emitter27 Emitter {
+      name "emitter27"
+      channel 27
+    }
+    DEF receiver27 Receiver {
+      name "receiver27"
+      channel 27
+    }
+    DEF emitter28 Emitter {
+      name "emitter28"
+      channel 28
+    }
+    DEF receiver28 Receiver {
+      name "receiver28"
+      channel 28
+    }
+    DEF emitter29 Emitter {
+      name "emitter29"
+      channel 29
+    }
+    DEF receiver29 Receiver {
+      name "receiver29"
+      channel 29
+    }
+    DEF emitter30 Emitter {
+      name "emitter30"
+      channel 30
+    }
+    DEF receiver30 Receiver {
+      name "receiver30"
+      channel 30
+    }
+    DEF emitter31 Emitter {
+      name "emitter31"
+      channel 31
+    }
+    DEF receiver31 Receiver {
+      name "receiver31"
+      channel 31
+    }
+    DEF emitter32 Emitter {
+      name "emitter32"
+      channel 32
+    }
+    DEF receiver32 Receiver {
+      name "receiver32"
+      channel 32
+    }
+    DEF emitter33 Emitter {
+      name "emitter33"
+      channel 33
+    }
+    DEF receiver33 Receiver {
+      name "receiver33"
+      channel 33
+    }
+    DEF emitter34 Emitter {
+      name "emitter34"
+      channel 34
+    }
+    DEF receiver34 Receiver {
+      name "receiver34"
+      channel 34
+    }
+    DEF emitter35 Emitter {
+      name "emitter35"
+      channel 35
+    }
+    DEF receiver35 Receiver {
+      name "receiver35"
+      channel 35
+    }
+    DEF emitter36 Emitter {
+      name "emitter36"
+      channel 36
+    }
+    DEF receiver36 Receiver {
+      name "receiver36"
+      channel 36
+    }
+    DEF emitter37 Emitter {
+      name "emitter37"
+      channel 37
+    }
+    DEF receiver37 Receiver {
+      name "receiver37"
+      channel 37
+    }
+    DEF emitter38 Emitter {
+      name "emitter38"
+      channel 38
+    }
+    DEF receiver38 Receiver {
+      name "receiver38"
+      channel 38
+    }
+    DEF emitter39 Emitter {
+      name "emitter39"
+      channel 39
+    }
+    DEF receiver39 Receiver {
+      name "receiver39"
+      channel 39
+    }
+    DEF emitter40 Emitter {
+      name "emitter40"
+      channel 40
+    }
+    DEF receiver40 Receiver {
+      name "receiver40"
+      channel 40
+    }
+    DEF emitter41 Emitter {
+      name "emitter41"
+      channel 41
+    }
+    DEF receiver41 Receiver {
+      name "receiver41"
+      channel 41
+    }
+    DEF emitter42 Emitter {
+      name "emitter42"
+      channel 42
+    }
+    DEF receiver42 Receiver {
+      name "receiver42"
+      channel 42
+    }
+    DEF emitter43 Emitter {
+      name "emitter43"
+      channel 43
+    }
+    DEF receiver43 Receiver {
+      name "receiver43"
+      channel 43
+    }
+    DEF emitter44 Emitter {
+      name "emitter44"
+      channel 44
+    }
+    DEF receiver44 Receiver {
+      name "receiver44"
+      channel 44
+    }
+    DEF emitter45 Emitter {
+      name "emitter45"
+      channel 45
+    }
+    DEF receiver45 Receiver {
+      name "receiver45"
+      channel 45
+    }
+    DEF emitter46 Emitter {
+      name "emitter46"
+      channel 46
+    }
+    DEF receiver46 Receiver {
+      name "receiver46"
+      channel 46
+    }
+    DEF emitter47 Emitter {
+      name "emitter47"
+      channel 47
+    }
+    DEF receiver47 Receiver {
+      name "receiver47"
+      channel 47
+    }
+    DEF emitter48 Emitter {
+      name "emitter48"
+      channel 48
+    }
+    DEF receiver48 Receiver {
+      name "receiver48"
+      channel 48
+    }
+    DEF emitter49 Emitter {
+      name "emitter49"
+      channel 49
+    }
+    DEF receiver49 Receiver {
+      name "receiver49"
+      channel 49
     }
   ]
   name "supervisor"
