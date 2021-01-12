@@ -24,9 +24,6 @@ public class AlignmentController {
 
         System.out.println("Working Directory = " + System.getProperty("user.dir"));
 
-        Supervisor.importEdmo(new Vector(0,0,0));
-        Supervisor.removeAllEdmos();
-
         int connector1Hardware = 0;
         int connector2Hardware = 1;
 
@@ -35,7 +32,6 @@ public class AlignmentController {
                 runExperiment(connector1Hardware, connector2Hardware, i, j);
             }
         }
-
 
     }
 
