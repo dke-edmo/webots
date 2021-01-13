@@ -75,8 +75,8 @@ public class AlignmentController {
         while (Supervisor.nextTimeStep() != -1) {
             if(counter < 100) {
                 // find stable orientation
-                if(counter == 10) allEdmos.getStream().forEach(e -> e.getCommunicator().emit(-Math.PI/2));
-                if(counter == 70) allEdmos.getStream().forEach(e -> e.getCommunicator().emit(Math.PI/2));
+                if(counter == 10) allEdmos.emit(-Math.PI/2);
+                if(counter == 70) allEdmos.emit(Math.PI/2);
             } else if(counter < 150) {
                 // stop movement
                 allEdmos.clearReceiver();
