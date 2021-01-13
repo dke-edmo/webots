@@ -33,6 +33,21 @@ public class Connection {
         Module moduleA,
         Module moduleB,
         Connector connectorA,
+        Connector connectorB
+    ) {
+        this(
+            moduleA,
+            moduleB,
+            connectorA,
+            connectorB,
+            Orientation.H
+        );
+    }
+
+    public Connection(
+        Module moduleA,
+        Module moduleB,
+        Connector connectorA,
         Connector connectorB,
         Orientation orientation
     ) {

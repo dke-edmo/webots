@@ -4,7 +4,7 @@ import EDMO.Module;
 
 
 import Utility.*;
-import Webots.IMUSensor.IMUReading;
+import Webots.IMUReading;
 import Webots.ObjectCommunicator;
 import Webots.WebotsNode;
 import com.cyberbotics.webots.controller.*;
@@ -43,8 +43,8 @@ public class SupervisorController {
         WebotsNode robot1 = new WebotsNode(supervisor.getFromDef("robot1"));
         WebotsNode robot2 = new WebotsNode(supervisor.getFromDef("robot2"));
 
-        Node cRobot1 = getConnectors(robot1).get(2);
-        Node cRobot2 = getConnectors(robot2).get(3);
+        Node cRobot1 = getConnectors(robot1).get(2).getNode();
+        Node cRobot2 = getConnectors(robot2).get(3).getNode();
         //translate(robot1, cRobot1, robot2, cRobot2);
 
         IMUReadings readings1 = new IMUReadings();
@@ -92,28 +92,27 @@ public class SupervisorController {
         2. Search for Hinge Joint
         3. Search fot the last Connector in EndPoint
      */
-    public static ArrayList<Node> getConnectors(WebotsNode robot){
-        ArrayList<Node> connectors = robot.getChildrenFromTypeName("Connector", "children");
-        Node hingeJointNode = robot.getChildFromTypeName("HingeJoint", "children");
-        Field endPoint = hingeJointNode.getField("endPoint");
-        Node childrenEndPoint = endPoint.getSFNode();
-        connectors.add(new WebotsNode(childrenEndPoint).
-                getChildFromTypeName("Connector", "children"));
+    public static ArrayList<WebotsNode> getConnectors(WebotsNode robot) {
+        ArrayList<WebotsNode> connectors = robot.getChildrenFromTypeName("Connector", "children");
+        connectors = robot.getChildrenFromTypeName("Connector", "children");
+        WebotsNode hingeJointNode = robot.getChildFromTypeName("HingeJoint", "children");
+        WebotsNode childrenEndPoint = hingeJointNode.getChildNodeFromField("endPoint");
+        connectors.add(childrenEndPoint.getChildFromTypeName("Connector", "children"));
         return connectors;
     }
 
     // Rotate around the z-axis to make to connectors facing each other
     public static void rotate(WebotsNode robot1, Node connectorR1, WebotsNode robot2, Node connectorR2){
-        ArrayList<Node> connectors1 = getConnectors(robot1);
-        ArrayList<Node> connectors2 = getConnectors(robot2);
+        ArrayList<WebotsNode> connectors1 = getConnectors(robot1);
+        ArrayList<WebotsNode> connectors2 = getConnectors(robot2);
         double[] rotationAroundZCounterClockwise = {0, 0, 1, Math.PI/2};
         Vector rotateCounter = new Vector(rotationAroundZCounterClockwise);
         // For robot 1 => Connector facing the right side
         boolean max = false;
         while(!max){
             int greaterX = 0;
-            for(Node connector: connectors1){
-                if(connector.getPosition()[0] > connectorR1.getPosition()[0]){
+            for(WebotsNode connector: connectors1){
+                if(connector.getNode().getPosition()[0] > connectorR1.getPosition()[0]){
                     greaterX++;
                 }
             }
@@ -127,8 +126,8 @@ public class SupervisorController {
         boolean min = false;
         while(!min){
             int smallerX = 0;
-            for(Node connector: connectors2){
-                if(connector.getPosition()[0] < connectorR2.getPosition()[0]){
+            for(WebotsNode connector: connectors2){
+                if(connector.getNode().getPosition()[0] < connectorR2.getPosition()[0]){
                     smallerX++;
                 }
             }

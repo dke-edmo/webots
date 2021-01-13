@@ -1,6 +1,7 @@
 package Webots;
 
 import EDMO.Module;
+import Utility.Matrix;
 import Utility.RotationVector;
 import Utility.Vector;
 import com.cyberbotics.webots.controller.Node;
@@ -16,6 +17,14 @@ public class WebotsNode extends Module {
         this.node = node;
     }
 
+    public Field getPhysics() {
+        return node.getField("physics");
+    }
+
+    public String getDef() {
+        return node.getDef();
+    }
+
     public Node getNode() {
         return node;
     }
@@ -28,24 +37,28 @@ public class WebotsNode extends Module {
             );
     }
 
-    public Node getChildFromTypeName(String typeName, String subTree) {
+    public WebotsNode getChildNodeFromField(String field) {
+        return new WebotsNode(node.getField(field).getSFNode());
+    }
+
+    public WebotsNode getChildFromTypeName(String typeName, String subTree) {
         Field childrenFiled = node.getField(subTree);
         for (int i = 0; i < childrenFiled.getCount(); i++) {
             Node childNode = childrenFiled.getMFNode(i);
             if(childNode.getTypeName().equals(typeName)) {
-                return childNode;
+                return new WebotsNode(childNode);
             }
         }
         throw new RuntimeException("Node of type: " + typeName + " not found in sub tree " + subTree);
     }
 
-    public ArrayList<Node> getChildrenFromTypeName(String typeName, String subTree) {
+    public ArrayList<WebotsNode> getChildrenFromTypeName(String typeName, String subTree) {
         Field childrenFiled = node.getField(subTree);
-        ArrayList<Node> childrenNodes = new ArrayList<>();
+        ArrayList<WebotsNode> childrenNodes = new ArrayList<>();
         for (int i = 0; i < childrenFiled.getCount(); i++) {
             Node childNode = childrenFiled.getMFNode(i);
             if(childNode.getTypeName().equals(typeName)){
-                childrenNodes.add(childNode);
+                childrenNodes.add(new WebotsNode(childNode));
             }
         }
         return childrenNodes;
@@ -76,6 +89,10 @@ public class WebotsNode extends Module {
 
     public Vector getZAxisOrientation() {
         return getOrientation().getEveryNthValue(3, 2);
+    }
+
+    public Matrix getRotationMatrix() {
+        return getOrientation().asMatrix(3, 3);
     }
 
     /**
