@@ -113,6 +113,35 @@ public class Matrix {
         return new Vector(column);
     }
 
+    public static Vector rotateAroundX(Vector vector, double theta){
+        return get3DRotationX(theta).multiply(vector);
+    }
+    public static Vector rotateAroundY(Vector vector, double theta){
+        return get3DRotationY(theta).multiply(vector);
+    }
+    public static Vector rotateAroundZ(Vector vector, double theta){
+        return get3DRotationZ(theta).multiply(vector);
+    }
+    // Counter-ClockWise rotation
+    private static Matrix get3DRotationX(double theta){
+        double[][] matrix = {{1, 0, 0},
+                            {0, Math.cos(theta), -Math.sin(theta)},
+                            {0, Math.sin(theta), Math.cos(theta)}};
+        return new Matrix(matrix);
+    }
+    private static Matrix get3DRotationY(double theta){
+        double[][] matrix = {{Math.cos(theta), 0, Math.sin(theta)},
+                            {0, 1, 0},
+                            {-Math.sin(theta), 0, Math.cos(theta)}};
+        return new Matrix(matrix);
+    }
+    private static Matrix get3DRotationZ(double theta){
+        double[][] matrix = {{Math.cos(theta), -Math.sin(theta), 0},
+                            {Math.sin(theta), Math.cos(theta), 0},
+                            {0, 0, 1}};
+        return new Matrix(matrix);
+    }
+
     public double getTrace() {
         if (this.rows != this.columns) throw new RuntimeException("Trace can be computed only for square matrix");
         double trace = 0;
