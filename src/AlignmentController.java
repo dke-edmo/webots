@@ -32,23 +32,28 @@ public class AlignmentController {
 
     private static void runExperiment(int connector1Hardware, int connector2Hardware, int connector1Simulation, int connector2Simulation) {
         EDMOCollection hardware = createSimpleEDMOStructure(new Vector(0, 0, 0), connector1Hardware, connector2Hardware);
-        EDMO edmo1 = hardware.getEdmos().get(0);
-        EDMO edmo2 = hardware.getEdmos().get(1);
+        EDMO edmo1H = hardware.getEdmos().get(0);
+        EDMO edmo2H = hardware.getEdmos().get(1);
 
         EDMOCollection edmo1Collection = new EDMOCollection();
-        edmo1Collection.add(edmo1);
+        edmo1Collection.add(edmo1H);
 
         EDMOCollection edmo2Collection = new EDMOCollection();
-        edmo2Collection.add(edmo2);
+        edmo2Collection.add(edmo2H);
+
+        Map<EDMO, EDMO> edmo1To2 = new HashMap<>();
+        edmo1To2.put(edmo1H, edmo2H);
 
         EDMOCollection edmosSimulation = new EDMOCollection();
-        for (int i = 1; i < 4; i++) {
+        for (int i = 1; i < 2; i++) {
 
             for (int m = -1; m <= 1; m+=2) {
                 for (int n = -1; n <= 1; n+=2) {
 
                     EDMOCollection simulation
                         = createSimpleEDMOStructure(new Vector(m*4, 0, n*4).multiply(i), connector1Simulation, connector2Simulation);
+
+                    edmo1To2.put(simulation.getEdmos().get(0), simulation.getEdmos().get(1));
 
                     edmo1Collection.add(simulation.getEdmos().get(0));
                     edmo2Collection.add(simulation.getEdmos().get(1));
@@ -64,6 +69,11 @@ public class AlignmentController {
         allEdmos.add(hardware);
         allEdmos.add(edmosSimulation);
 
+        Metrics relationMetrics = new Metrics();
+        Metrics allReadingsMetrics = new Metrics();
+        Metrics linearReadingsMetrics = new Metrics();
+        Metrics angularReadingsMetrics = new Metrics();
+
         int counter = 0;
         while (Supervisor.nextTimeStep() != -1) {
             if(counter < 100) {
@@ -74,32 +84,40 @@ public class AlignmentController {
                 // stop movement
                 allEdmos.clearReceiver();
                 allEdmos.emit(0);
-            } else if(counter < 350) {
+            } else if(counter < 400) {
                 if(counter == 150) edmo1Collection.emit(Math.PI/2);
                 if(counter == 200) edmo1Collection.emit(-Math.PI/2);
                 if(counter == 250) edmo2Collection.emit(Math.PI/2);
                 if(counter == 300) edmo2Collection.emit(-Math.PI/2);
-            } else if(counter == 350) {
+            } else if(counter == 400) {
 
-                IMUReadings readingsHardware1 = edmo1.getIMUReadings();
-                Vector allReadingsEDMO1Hardware = readingsHardware1.toVector();
-                Vector linearReadingsEDMO1Hardware = readingsHardware1.getLinearAccelerationReadings();
-                Vector angularReadingsEDMO1Hardware = readingsHardware1.getAngularAccelerationReadings();
+                IMUReadings readingsEDMO1H = edmo1H.getIMUReadings();
+                Vector allReadingsEDMO1H = readingsEDMO1H.toVector();
+                Vector linearReadingsEDMO1H = readingsEDMO1H.getLinearAccelerationReadings();
+                Vector angularReadingsEDMO1H = readingsEDMO1H.getAngularAccelerationReadings();
 
-                Metrics allReadingsMetrics = new Metrics();
-                Metrics linearReadingsMetrics = new Metrics();
-                Metrics angularReadingsMetrics = new Metrics();
+                Vector relationH = edmo1H.getLastLinearAccelerationReading()
+                    .crossProduct(edmo2H.getLastLinearAccelerationReading());
 
-                for (EDMO edmo: edmo1Collection.getEdmos()) {
+                for (EDMO edmo1S: edmo1Collection.getEdmos()) {
 
-                    IMUReadings readingsSimulation = edmo.getIMUReadings();
-                    Vector allReadingsEDMO1Simulation = readingsSimulation.toVector();
-                    Vector linearReadingsEDMO1Simulation = readingsSimulation.getLinearAccelerationReadings();
-                    Vector angularReadingsEDMO1Simulation = readingsSimulation.getAngularAccelerationReadings();
+                    EDMO edmo2S = edmo1To2.get(edmo1S);
 
-                    allReadingsMetrics.addResult(allReadingsEDMO1Hardware, allReadingsEDMO1Simulation);
-                    linearReadingsMetrics.addResult(linearReadingsEDMO1Hardware, linearReadingsEDMO1Simulation);
-                    angularReadingsMetrics.addResult(angularReadingsEDMO1Hardware, angularReadingsEDMO1Simulation);
+//                    double similarityOfOrientation = edmo1H.getLastLinearAccelerationReading()
+//                        .cosineSimilarity(edmo1S.getLastLinearAccelerationReading());
+
+                    Vector relationS = edmo1S.getLastLinearAccelerationReading()
+                        .crossProduct(edmo2S.getLastLinearAccelerationReading());
+
+                    IMUReadings readingsEDMO1S = edmo1S.getIMUReadings();
+                    Vector allReadingsEDMO1S = readingsEDMO1S.toVector();
+                    Vector linearReadingsEDMO1S = readingsEDMO1S.getLinearAccelerationReadings();
+                    Vector angularReadingsEDMO1S = readingsEDMO1S.getAngularAccelerationReadings();
+
+                    relationMetrics.addResult(relationH, relationS);
+                    allReadingsMetrics.addResult(allReadingsEDMO1H, allReadingsEDMO1S);
+                    linearReadingsMetrics.addResult(linearReadingsEDMO1H, linearReadingsEDMO1S);
+                    angularReadingsMetrics.addResult(angularReadingsEDMO1H, angularReadingsEDMO1S);
 
                 }
 
@@ -109,6 +127,8 @@ public class AlignmentController {
                 );
                 System.out.print(",    ");
 
+                relationMetrics.print();
+                System.out.print("    ");
                 allReadingsMetrics.print();
                 System.out.print("    ");
                 linearReadingsMetrics.print();
