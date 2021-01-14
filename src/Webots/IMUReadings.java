@@ -21,6 +21,32 @@ public class IMUReadings implements Serializable {
         this.readings = readings;
     }
 
+    public Vector getLinearAccelerationReadings() {
+        int counter = 0;
+        double[] vector = new double[readings.size() * 6];
+        for (IMUReading reading: readings) {
+            double[] readingVector = reading.getLinear().getDoubleArray();
+            for (double v: readingVector) {
+                vector[counter] = v;
+                counter++;
+            }
+        }
+        return new Vector(vector);
+    }
+
+    public Vector getAngularAccelerationReadings() {
+        int counter = 0;
+        double[] vector = new double[readings.size() * 6];
+        for (IMUReading reading: readings) {
+            double[] readingVector = reading.getAngular().getDoubleArray();
+            for (double v: readingVector) {
+                vector[counter] = v;
+                counter++;
+            }
+        }
+        return new Vector(vector);
+    }
+
     public List<IMUReading> getAll() {
         return readings;
     }
