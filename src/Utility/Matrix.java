@@ -25,6 +25,7 @@ public class Matrix {
         }
     }
 
+
     public static Matrix getIdentityMatrix(int size) {
         Matrix identityMatrix = new Matrix(size, size);
         for (int i = 0; i < size; i++) {
@@ -44,6 +45,10 @@ public class Matrix {
             {z, 0, -x},
             {-y, x, 0}
         });
+    }
+    public double[][] toDoubleArray()
+    {
+        return matrix;
     }
 
     public Matrix add(Matrix B) {
@@ -163,6 +168,15 @@ public class Matrix {
             axisVector,
             Math.atan2(axisVector.length(), getTrace() - 1)
         );
+    }
+    public Vector asVector()
+    {
+        double[] vector = new double[matrix.length * matrix[0].length];
+        for(int i=0; i<vector.length; i++)
+        {
+            vector[i] = matrix[i / columns][i % columns];
+        }
+        return new Vector(vector);
     }
 
     public String toString() {
