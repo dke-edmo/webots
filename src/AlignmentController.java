@@ -1,17 +1,12 @@
 import EDMO.Connection;
-import EDMO.Connection.Connector;
-import EDMO.Connection.Orientation;
 import EDMO.Module;
 import EDMO.Structure;
-import Utility.Matrix;
+import Utility.Metrics.*;
 import Utility.RotationVector;
 import Utility.Vector;
 import Webots.*;
-import com.cyberbotics.webots.controller.Field;
-import com.cyberbotics.webots.controller.Node;
 
 import java.util.*;
-import java.util.stream.DoubleStream;
 
 /**
  * @author Tomasz Darmetko
@@ -53,7 +48,7 @@ public class AlignmentController {
                 for (int n = -1; n <= 1; n+=2) {
 
                     EDMOCollection simulation
-                        = createSimpleEDMOStructure(new Vector(m*3, 0, n*3).multiply(i), connector1Simulation, connector2Simulation);
+                        = createSimpleEDMOStructure(new Vector(m*4, 0, n*4).multiply(i), connector1Simulation, connector2Simulation);
 
                     edmo1Collection.add(simulation.getEdmos().get(0));
                     edmo2Collection.add(simulation.getEdmos().get(1));
@@ -70,8 +65,6 @@ public class AlignmentController {
         allEdmos.add(edmosSimulation);
 
         int counter = 0;
-        IMUReadings readingsHardware = new IMUReadings();
-        IMUReadings readingsSimulation = new IMUReadings();
         while (Supervisor.nextTimeStep() != -1) {
             if(counter < 100) {
                 // find stable orientation
@@ -81,49 +74,48 @@ public class AlignmentController {
                 // stop movement
                 allEdmos.clearReceiver();
                 allEdmos.emit(0);
-            } else if(counter < 250) {
+            } else if(counter < 350) {
                 if(counter == 150) edmo1Collection.emit(Math.PI/2);
                 if(counter == 200) edmo1Collection.emit(-Math.PI/2);
-                if(counter == 150) edmo2Collection.emit(Math.PI/2);
-                if(counter == 200) edmo2Collection.emit(-Math.PI/2);
-            } else if(counter == 250) {
+                if(counter == 250) edmo2Collection.emit(Math.PI/2);
+                if(counter == 300) edmo2Collection.emit(-Math.PI/2);
+            } else if(counter == 350) {
 
-                readingsHardware = edmo1.getIMUReadings();
-                Vector readingsVecHardware = readingsHardware.toVector();
+                IMUReadings readingsHardware1 = edmo1.getIMUReadings();
+                Vector allReadingsEDMO1Hardware = readingsHardware1.toVector();
+                Vector linearReadingsEDMO1Hardware = readingsHardware1.getLinearAccelerationReadings();
+                Vector angularReadingsEDMO1Hardware = readingsHardware1.getAngularAccelerationReadings();
 
-                Map<String, List<Double>> metrics = new HashMap<>();
-                metrics.put("Normalized Vector Similarity", new ArrayList<>());
-                metrics.put("Not Normalized Vector Similarity", new ArrayList<>());
-                metrics.put("Normalized Vector Distance", new ArrayList<>());
-                metrics.put("Not Normalized Vector Distance", new ArrayList<>());
+                Metrics allReadingsMetrics = new Metrics();
+                Metrics linearReadingsMetrics = new Metrics();
+                Metrics angularReadingsMetrics = new Metrics();
 
                 for (EDMO edmo: edmo1Collection.getEdmos()) {
 
-                    readingsSimulation = edmo.getIMUReadings();
-                    Vector readingsVecSimulation = readingsSimulation.toVector();
+                    IMUReadings readingsSimulation = edmo.getIMUReadings();
+                    Vector allReadingsEDMO1Simulation = readingsSimulation.toVector();
+                    Vector linearReadingsEDMO1Simulation = readingsSimulation.getLinearAccelerationReadings();
+                    Vector angularReadingsEDMO1Simulation = readingsSimulation.getAngularAccelerationReadings();
 
-                    metrics.get("Normalized Vector Similarity")
-                        .add(readingsVecHardware.normalize().cosineSimilarity(readingsVecSimulation.normalize()));
-                    metrics.get("Not Normalized Vector Similarity")
-                        .add(readingsVecHardware.cosineSimilarity(readingsVecSimulation));
+                    allReadingsMetrics.addResult(allReadingsEDMO1Hardware, allReadingsEDMO1Simulation);
+                    linearReadingsMetrics.addResult(linearReadingsEDMO1Hardware, linearReadingsEDMO1Simulation);
+                    angularReadingsMetrics.addResult(angularReadingsEDMO1Hardware, angularReadingsEDMO1Simulation);
 
-                    metrics.get("Normalized Vector Distance")
-                        .add(readingsVecHardware.normalize().euclideanDistance(readingsVecSimulation.normalize()));
-                    metrics.get("Not Normalized Vector Distance")
-                        .add(readingsVecHardware.euclideanDistance(readingsVecSimulation));
                 }
 
-                System.out.println(
-                    "Hardware: " + connector1Hardware + " " + connector2Hardware + " " +
-                    "Simulation: " + connector1Simulation + " " + connector2Simulation
+                System.out.print(
+                    "H" + connector1Hardware + connector2Hardware + " " +
+                    "S" + connector1Simulation + connector2Simulation
                 );
+                System.out.print(",    ");
 
-                for (Map.Entry<String, List<Double>> entry: metrics.entrySet()) {
-                    System.out.println(
-                        entry.getKey() + ": " +
-                        entry.getValue().stream().mapToDouble(v -> v).average().getAsDouble()
-                    );
-                }
+                allReadingsMetrics.print();
+                System.out.print("    ");
+                linearReadingsMetrics.print();
+                System.out.print("    ");
+                angularReadingsMetrics.print();
+
+                System.out.println();
 
            } else {
                 Supervisor.removeAllEdmos();

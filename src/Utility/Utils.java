@@ -32,7 +32,7 @@ public class Utils {
             return "NaN";
         }
         BigDecimal bd = new BigDecimal(n);
-        bd = bd.round(new MathContext(3));
+        bd = bd.round(new MathContext(4));
         return bd.toString();
     }
 
