@@ -9,8 +9,9 @@ DEF edmo__id__ Robot {
       rotation -2.525411004240773e-06 -0.7071062811839172 0.7071072811843148 3.14159
       isLocked TRUE
       autoLock TRUE
+      distanceTolerance 0.1
       axisTolerance 3.14159
-      rotationTolerance 3.14159
+      rotationTolerance 0
       numberOfRotations 0
       snap FALSE
     }
@@ -20,8 +21,9 @@ DEF edmo__id__ Robot {
       name "connector2"
       isLocked TRUE
       autoLock TRUE
+      distanceTolerance 0.1
       axisTolerance 3.1415
-      rotationTolerance 3.1415
+      rotationTolerance 0
       numberOfRotations 0
       snap FALSE
     }
@@ -31,8 +33,9 @@ DEF edmo__id__ Robot {
       name "connector3"
       isLocked TRUE
       autoLock TRUE
+      distanceTolerance 0.1
       axisTolerance 3.14159
-      rotationTolerance 3.14159
+      rotationTolerance 0
       numberOfRotations 0
       snap FALSE
     }
@@ -77,7 +80,7 @@ DEF edmo__id__ Robot {
             autoLock TRUE
             distanceTolerance 0.1
             axisTolerance 3.14
-            rotationTolerance 3.14
+            rotationTolerance 0
             numberOfRotations 0
             snap FALSE
           }
