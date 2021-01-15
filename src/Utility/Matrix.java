@@ -51,6 +51,55 @@ public class Matrix {
         return matrix;
     }
 
+    // Returns the inverse of this matrix
+    public Matrix inverse() {
+        assert(rows == columns);
+        // Augment by identity matrix
+        Matrix tmp = new Matrix(rows, columns * 2);
+        for (int row = 0; row < rows; ++row) {
+            System.arraycopy(matrix[row], 0, tmp.matrix[row], 0, columns);
+            tmp.matrix[row][row + columns] = 1;
+        }
+        tmp.toReducedRowEchelonForm();
+        Matrix inv = new Matrix(rows, columns);
+        for (int row = 0; row < rows; ++row)
+            System.arraycopy(tmp.matrix[row], columns, inv.matrix[row], 0, columns);
+        return inv;
+    }
+
+    // Converts this matrix into reduced row echelon form
+    private void toReducedRowEchelonForm() {
+        for (int row = 0, lead = 0; row < rows && lead < columns; ++row, ++lead) {
+            int i = row;
+            while (matrix[i][lead] == 0) {
+                if (++i == rows) {
+                    i = row;
+                    if (++lead == columns)
+                        return;
+                }
+            }
+            swapRows(i, row);
+            if (matrix[row][lead] != 0) {
+                double f = matrix[row][lead];
+                for (int column = 0; column < columns; ++column)
+                    matrix[row][column] /= f;
+            }
+            for (int j = 0; j < rows; ++j) {
+                if (j == row)
+                    continue;
+                double f = matrix[j][lead];
+                for (int column = 0; column < columns; ++column)
+                    matrix[j][column] -= f * matrix[row][column];
+            }
+        }
+    }
+
+    private void swapRows(int i, int j) {
+        double[] tmp = matrix[i];
+        matrix[i] = matrix[j];
+        matrix[j] = tmp;
+    }
+
     public Matrix add(Matrix B) {
         Matrix A = this;
         if (B.rows != A.rows || B.columns != A.columns) {
