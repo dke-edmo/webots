@@ -252,24 +252,14 @@ public class AlignmentController {
         if(connectorAddon == connectorBase)
             throw new RuntimeException("One connector can not be connected with itself!");
 
-        System.out.println("A:" + addon + " CA:" + connectorAddon + " B:" + base + " CB:" + connectorBase);
-
-        addon.setRotation(new RotationVector(0, 1, 0, 0));
-
-        Supervisor.update();
-
         Matrix rotate180degreesAroundX = new Matrix(new double[][]{{1,0,0}, {0,-1,0}, {0,0,-1}});
         Matrix rotationAddonConnector = connectorAddon.getRotationMatrix();
         Matrix rotationBaseConnector = connectorBase.getRotationMatrix().multiply(rotate180degreesAroundX);
 
-        Vector zAxisOfAddonConnector = connectorAddon.getZAxisOrientation();
-        Vector zAxisOfBaseConnector = connectorBase.getZAxisOrientation().multiply(-1);
-        RotationVector rotateFromAddonConnectorToBaseConnector =
-            zAxisOfAddonConnector.rotationVector(zAxisOfBaseConnector);
-
+        // X(AC) = BC
+        // X = BC(AC^-1)
         Matrix rotationAddonConnectorInverse = rotationAddonConnector.inverse();
 
-        System.out.println("-------------------------------------");
         addon.setRotation(rotationBaseConnector.multiply(rotationAddonConnectorInverse).getRotationVector());
 
         Supervisor.update();

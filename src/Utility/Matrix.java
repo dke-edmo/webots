@@ -51,7 +51,9 @@ public class Matrix {
         return matrix;
     }
 
-    // Returns the inverse of this matrix
+    /**
+     * Source: https://rosettacode.org/wiki/Gauss-Jordan_matrix_inversion#Java
+     */
     public Matrix inverse() {
         assert(rows == columns);
         // Augment by identity matrix
@@ -67,7 +69,9 @@ public class Matrix {
         return inv;
     }
 
-    // Converts this matrix into reduced row echelon form
+    /**
+     * Source: https://rosettacode.org/wiki/Gauss-Jordan_matrix_inversion#Java
+     */
     private void toReducedRowEchelonForm() {
         for (int row = 0, lead = 0; row < rows && lead < columns; ++row, ++lead) {
             int i = row;
@@ -94,6 +98,9 @@ public class Matrix {
         }
     }
 
+    /**
+     * Source: https://rosettacode.org/wiki/Gauss-Jordan_matrix_inversion#Java
+     */
     private void swapRows(int i, int j) {
         double[] tmp = matrix[i];
         matrix[i] = matrix[j];
