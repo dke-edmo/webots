@@ -97,7 +97,8 @@ public class FFTController {
                 metrics.put("Not Normalized Vector Similarity", new ArrayList<>());
                 metrics.put("Normalized Vector Distance", new ArrayList<>());
                 metrics.put("Not Normalized Vector Distance", new ArrayList<>());
-                //metrics.put("Fourier Transform", new ArrayList<>());
+                metrics.put("Fourier Transform Distance", new ArrayList<>());
+                metrics.put("Fourier Transform Similarity", new ArrayList<>());
 
                 for (EDMO edmo: edmo1Collection.getEdmos()) {
 
@@ -114,8 +115,17 @@ public class FFTController {
                     metrics.get("Not Normalized Vector Distance")
                             .add(readingsVecHardware.euclideanDistance(readingsVecSimulation));
 
-                    double[][] data = new double[][]{{1,2,3},{1,2,3},{1,2,3}};
-                    double[][] fourier = fourier(data);
+                    double[][] simData = readingsVecSimulation.asMatrix(readingsVecSimulation.getSize()/3,3).toDoubleArray();
+                    double[][] fourierSim = fourier(simData);
+                    double[][] hardData = readingsVecHardware.asMatrix(readingsVecHardware.getSize()/3, 3).toDoubleArray();
+                    double[][] fourierHard = fourier(hardData);
+                    Vector fourierVecSim = new Matrix(fourierSim).asVector();
+                    Vector fourierVecHard = new Matrix(fourierHard).asVector();
+
+                    metrics.get("Fourier Transform Distance").add(fourierVecHard.euclideanDistance(fourierVecSim));
+                    metrics.get("Fourier Transform Similarity").add(fourierVecHard.cosineSimilarity(fourierVecSim));
+
+
 
                 }
 
