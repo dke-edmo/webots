@@ -79,8 +79,8 @@ public class Structure {
     private void validate() {
         Module current = modules.iterator().next();
         validateNoCycles(current, null, new HashSet<>());
-        getTopologicallySortedModules(current, new ArrayList<>());
-        getTopologicallySortedConnections(connections.iterator().next(), new ArrayList<>());
+        getTopologicallySortedModules(current, new ArrayList<>(), true);
+        getTopologicallySortedConnections(connections.iterator().next(), new ArrayList<>(), true);
     }
 
     private void validateNoCycles(Module current, Module previous, Set<Module> visited) {
@@ -94,31 +94,37 @@ public class Structure {
         visited.remove(current);
     }
 
-    private List<Module> getTopologicallySortedModules(Module current, List<Module> visited) {
+    private List<Module> getTopologicallySortedModules(Module current, List<Module> visited, boolean root) {
         visited.add(current);
         if(visited.size() == modules.size()) return visited;
         for (Module module: getConnectedModules(current)) {
             if(visited.contains(module)) continue;
-            visited = getTopologicallySortedModules(module, visited);
+            visited = getTopologicallySortedModules(module, visited, false);
             if(visited.size() == modules.size()) return visited;
         }
-        throw new RuntimeException("Not all modules are connected together!");
+        if(!root) return visited;
+        List<Module> missingModules = new ArrayList<Module>(modules);
+        missingModules.removeAll(visited);
+        throw new RuntimeException("Not all modules are connected together! " + missingModules);
     }
 
-    private List<Connection> getTopologicallySortedConnections(Connection current, List<Connection> visited) {
+    private List<Connection> getTopologicallySortedConnections(Connection current, List<Connection> visited, boolean root) {
         visited.add(current);
         if(visited.size() == connections.size()) return visited;
         for (Connection connection: getConnections(current.getModuleA())) {
             if(visited.contains(connection)) continue;
-            visited = getTopologicallySortedConnections(connection, visited);
+            visited = getTopologicallySortedConnections(connection, visited, false);
             if(visited.size() == connections.size()) return visited;
         }
         for (Connection connection: getConnections(current.getModuleB())) {
             if(visited.contains(connection)) continue;
-            visited = getTopologicallySortedConnections(connection, visited);
+            visited = getTopologicallySortedConnections(connection, visited, false);
             if(visited.size() == connections.size()) return visited;
         }
-        throw new RuntimeException("Not all modules are connected together!");
+        if(!root) return visited;
+        List<Connection> missingConnections = new ArrayList<Connection>(connections);
+        missingConnections.removeAll(visited);
+        throw new RuntimeException("Not all modules are connected together! " + missingConnections);
     }
 
     public Set<Module> getModules() {
@@ -126,11 +132,11 @@ public class Structure {
     }
 
     public List<Module> getTopologicallySortedModules() {
-        return getTopologicallySortedModules(modules.iterator().next(), new ArrayList<>());
+        return getTopologicallySortedModules(modules.iterator().next(), new ArrayList<>(), true);
     }
 
     public List<Connection> getTopologicallySortedConnections() {
-        return getTopologicallySortedConnections(connections.iterator().next(), new ArrayList<>());
+        return getTopologicallySortedConnections(connections.iterator().next(), new ArrayList<>(), true);
     }
 
     public List<Connection> getAllConnections() {
