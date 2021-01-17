@@ -216,14 +216,14 @@ public class AlignmentController {
                     if(j == k) continue;
                     for (int l = 0; l < 4; l++) {
                         System.out.println(i + " " + j);
-                        EDMO edmo1 = Supervisor.importEdmo(new Vector(4, 1, 4));
-                        EDMO edmo2 = Supervisor.importEdmo(new Vector(2, 1, 2));
+                        EDMO edmo1 = Supervisor.importEdmo(new Vector(4, 2, 4));
+                        EDMO edmo2 = Supervisor.importEdmo(new Vector(2, 2, 2));
     //                edmo2.setRotation(new RotationVector(Math.random(), Math.random(), Math.random(), Math.random()));
                         connect(
                             edmo1, edmo2,
                             edmo1.getConnector(i), edmo2.getConnector(j)
                         );
-                        EDMO edmo3 = Supervisor.importEdmo(new Vector(0, 1, 0));
+                        EDMO edmo3 = Supervisor.importEdmo(new Vector(0, 2, 0));
                         connect(
                             edmo3, edmo2,
                             edmo3.getConnector(l), edmo2.getConnector(k)
