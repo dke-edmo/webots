@@ -119,8 +119,8 @@ public class FFTController {
                     double[][] fourierSim = fourier(simData);
                     double[][] hardData = readingsVecHardware.asMatrix(readingsVecHardware.getSize()/3, 3).toDoubleArray();
                     double[][] fourierHard = fourier(hardData);
-                    Vector fourierVecSim = new Matrix(fourierSim).asVector();
-                    Vector fourierVecHard = new Matrix(fourierHard).asVector();
+                    Vector fourierVecSim = new Matrix(computeMagnitude(fourierSim)).asVector();
+                    Vector fourierVecHard = new Matrix(computeMagnitude(fourierHard)).asVector();
 
                     metrics.get("Fourier Transform Distance").add(fourierVecHard.euclideanDistance(fourierVecSim));
                     metrics.get("Fourier Transform Similarity").add(fourierVecHard.cosineSimilarity(fourierVecSim));
@@ -264,13 +264,24 @@ public class FFTController {
     public static double[][] fourier(double[][] data)
     {
         //make fourier transform
-        //data = new double[][]{{1,2,3}, {1,2,3}, {1,2,3}};
-        //print(data);
         DoubleFFT_2D fourier = new DoubleFFT_2D(data.length, data[0].length);
         double[][] fft = new double[data.length][data[0].length*2];
         //print(fft);
         copy(data, fft);
         fourier.realForwardFull(fft);
         return fft;
+    }
+    public static double[][] computeMagnitude(double[][] data)
+    {
+        double[][] result = new double[data.length][data[0].length/2];
+        for(int i=0; i<result.length; i++)
+        {
+            for (int j=0; j<result[0].length; j++)
+            {
+                result[i][j] = Math.sqrt(Math.pow(data[i][j*2], 2) + Math.pow(data[i][(j*2+1)], 2));
+
+            }
+        }
+        return result;
     }
 }
