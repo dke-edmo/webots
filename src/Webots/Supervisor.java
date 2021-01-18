@@ -73,9 +73,15 @@ public class Supervisor {
     }
 
     public static void update() {
+        for (int i = 1; i < edmoCounter; i++) {
+            getEdmoById(i).getNode().setVelocity(new double[]{0, 0, 0, 0, 0, 0});
+        }
         supervisor.simulationResetPhysics();
-        nextTimeStep();
+        supervisor.step(1);
         supervisor.simulationResetPhysics();
+        for (int i = 1; i < edmoCounter; i++) {
+            getEdmoById(i).getNode().setVelocity(new double[]{0, 0, 0, 0, 0, 0});
+        }
     }
 
 }

@@ -1,6 +1,7 @@
 import EDMO.Connection;
 import EDMO.Module;
 import EDMO.Structure;
+import Utility.Matrix;
 import Utility.Metrics.*;
 import Utility.RotationVector;
 import Utility.Vector;
@@ -19,14 +20,37 @@ public class AlignmentController {
 
         System.out.println("Working Directory = " + System.getProperty("user.dir"));
 
-        int connector1Hardware = 0;
-        int connector2Hardware = 1;
+        testAllConnections();
 
-        for (int i = 0; i < 4; i++) {
-            for (int j = 0; j < 4; j++) {
-                runExperiment(connector1Hardware, connector2Hardware, i, j);
-            }
-        }
+        Module moduleT = new Module();
+        Module moduleTL = new Module();
+        Module moduleTR = new Module();
+        Module moduleB = new Module();
+        Module moduleBL = new Module();
+        Module moduleBR = new Module();
+        moduleT.name = "T";
+        moduleTL.name = "TL";
+        moduleTR.name = "TR";
+        moduleB.name = "B";
+        moduleBL.name = "BL";
+        moduleBR.name = "BR";
+
+        createStructure(new Structure(
+            new Connection(moduleT, moduleB, Connection.Connector.B, Connection.Connector.T, Connection.Orientation.H),
+            new Connection(moduleT, moduleTL, Connection.Connector.L, Connection.Connector.B, Connection.Orientation.H),
+            new Connection(moduleT, moduleTR, Connection.Connector.R, Connection.Connector.B, Connection.Orientation.H),
+            new Connection(moduleB, moduleBL, Connection.Connector.L, Connection.Connector.B, Connection.Orientation.H),
+            new Connection(moduleB, moduleBR, Connection.Connector.R, Connection.Connector.B, Connection.Orientation.H)
+        ));
+
+//        int connector1Hardware = 0;
+//        int connector2Hardware = 1;
+//
+//        for (int i = 0; i < 4; i++) {
+//            for (int j = 0; j < 4; j++) {
+//                runExperiment(connector1Hardware, connector2Hardware, i, j);
+//            }
+//        }
 
     }
 
@@ -188,19 +212,28 @@ public class AlignmentController {
     private static void testAllConnections() {
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
-                System.out.println(i + " " + j);
-                EDMO edmo1 = Supervisor.importEdmo(new Vector(2, 1, 2));
-                EDMO edmo2 = Supervisor.importEdmo(new Vector(0, 1, 0));
-//                edmo2.setRotation(new RotationVector(Math.random(), Math.random(), Math.random(), Math.random()));
-                connect(
-                    edmo1, edmo2,
-                    edmo1.getConnector(i), edmo2.getConnector(j)
-                );
-                for (int k = 0; k < 100; k++) {
-                    Supervisor.nextTimeStep();
+                for (int k = 0; k < 4; k++) {
+                    if(j == k) continue;
+                    for (int l = 0; l < 4; l++) {
+                        System.out.println(i + " " + j);
+                        EDMO edmo1 = Supervisor.importEdmo(new Vector(4, 2, 4));
+                        EDMO edmo2 = Supervisor.importEdmo(new Vector(2, 2, 2));
+    //                edmo2.setRotation(new RotationVector(Math.random(), Math.random(), Math.random(), Math.random()));
+                        connect(
+                            edmo1, edmo2,
+                            edmo1.getConnector(i), edmo2.getConnector(j)
+                        );
+                        EDMO edmo3 = Supervisor.importEdmo(new Vector(0, 2, 0));
+                        connect(
+                            edmo3, edmo2,
+                            edmo3.getConnector(l), edmo2.getConnector(k)
+                        );
+                        for (int m = 0; m < 300; m++) {
+                            Supervisor.nextTimeStep();
+                        }
+                        Supervisor.removeAllEdmos();
+                    }
                 }
-                edmo1.getNode().remove();
-                edmo2.getNode().remove();
             }
         }
     }
@@ -208,26 +241,26 @@ public class AlignmentController {
     private static EDMO getEDMO(Module module) {
         if(!modules.containsKey(module)) {
             int id = modules.size() + 1;
-            modules.put(module, Supervisor.importEdmo(new Vector(1, 1, 1).multiply(id)));
+            modules.put(module, Supervisor.importEdmo(new Vector(3, 0, 3).multiply(id).add(5)));
         }
         return modules.get(module);
     }
 
-    private static void connect(WebotsNode addon, WebotsNode base, WebotsNode connectorAddon, WebotsNode connectorBase) {
+    private static void connect(EDMO addon, EDMO base, WebotsNode connectorAddon, WebotsNode connectorBase) {
         if(addon == base)
             throw new RuntimeException("One module can not be connected with itself!");
         if(connectorAddon == connectorBase)
             throw new RuntimeException("One connector can not be connected with itself!");
 
-        addon.setRotation(new RotationVector(0, 1, 0, 0));
+        Matrix rotate180degreesAroundX = new Matrix(new double[][]{{1,0,0}, {0,-1,0}, {0,0,-1}});
+        Matrix rotationAddonConnector = connectorAddon.getRotationMatrix();
+        Matrix rotationBaseConnector = connectorBase.getRotationMatrix().multiply(rotate180degreesAroundX);
 
-        Supervisor.update();
+        // X(AC) = BC
+        // X = BC(AC^-1)
+        Matrix rotationAddonConnectorInverse = rotationAddonConnector.inverse();
 
-        Vector zAxisOfAddonConnector = connectorAddon.getZAxisOrientation();
-        Vector zAxisOfBaseConnector = connectorBase.getZAxisOrientation().multiply(-1);
-        RotationVector rotateFromAddonConnectorToBaseConnector =
-            zAxisOfAddonConnector.rotationVector(zAxisOfBaseConnector);
-        addon.setRotation(rotateFromAddonConnectorToBaseConnector);
+        addon.setRotation(rotationBaseConnector.multiply(rotationAddonConnectorInverse).getRotationVector());
 
         Supervisor.update();
 
@@ -235,8 +268,18 @@ public class AlignmentController {
         Vector baseConnectorPosition = connectorBase.getPosition();
         Vector translationFromAddonConnectorToBaseConnector =
             baseConnectorPosition.subtract(addonConnectorPosition);
+
+        connectorAddon.getNode().getField("isLocked").setSFBool(false);
+        connectorBase.getNode().getField("isLocked").setSFBool(false);
+
         addon.setTranslation(addon.getPosition().add(translationFromAddonConnectorToBaseConnector));
 
         Supervisor.update();
+
+        connectorAddon.getNode().getField("isLocked").setSFBool(true);
+        connectorBase.getNode().getField("isLocked").setSFBool(true);
+
+        Supervisor.update();
+
     }
 }

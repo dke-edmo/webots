@@ -131,4 +131,8 @@ public class WebotsNode extends Module {
 //        node.resetPhysics();
     }
 
+    public String toString() {
+        return "Node{" + getDef() + "}";
+    }
+
 }
