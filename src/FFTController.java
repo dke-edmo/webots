@@ -20,6 +20,7 @@ import java.util.stream.DoubleStream;
 public class FFTController {
 
     static Map<Module, EDMO> modules = new HashMap<>();
+    public static String experimentResults = "";
 
     public static void main(String[] args) {
 
@@ -28,11 +29,14 @@ public class FFTController {
         int connector1Hardware = 0;
         int connector2Hardware = 1;
 
+
+
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
                 runExperiment(connector1Hardware, connector2Hardware, i, j);
             }
         }
+        System.out.println(experimentResults);
 
     }
 
@@ -133,15 +137,23 @@ public class FFTController {
                         "Hardware: " + connector1Hardware + " " + connector2Hardware + " " +
                                 "Simulation: " + connector1Simulation + " " + connector2Simulation
                 );
+                experimentResults += "Hardware: " + connector1Hardware + " " + connector2Hardware + " " +
+                        "Simulation: " + connector1Simulation + " " + connector2Simulation + "\n";
 
                 for (Map.Entry<String, List<Double>> entry: metrics.entrySet()) {
                     System.out.println(
                             entry.getKey() + ": " +
                                     entry.getValue().stream().mapToDouble(v -> v).average().getAsDouble()
                     );
+                    experimentResults += entry.getKey() + ": " + entry.getValue().stream().mapToDouble(v -> v).average().getAsDouble() + "\n";
                 }
 
             } else {
+                if(connector1Simulation == 3 && connector2Simulation == 3)
+                {
+                    System.out.println(experimentResults);
+                }
+                System.out.println("compiled11");
                 Supervisor.removeAllEdmos();
                 break;
             }
